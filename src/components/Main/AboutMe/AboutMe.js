@@ -3,7 +3,7 @@ import student from '../../../images/student.jpg';
 
 function AboutMe() {
   return (
-    <section className='student'>
+    <section className='student' id='student'>
       <div className='student__container'>
         <h2 className='student__title'>Студент</h2>
         <div className='student__block'>
@@ -19,15 +19,16 @@ function AboutMe() {
               Контур». После того, как прошёл курс по веб-разработке, начал
               заниматься фриланс-заказами и ушёл с постоянной работы.
             </p>
-            <a className='student__github-link' href='#'>
+            <a
+              className='student__github-link'
+              href='https://github.com/goldlexx'
+              target='_blank'
+              rel='noreferrer'
+            >
               Github
             </a>
           </div>
-          <img
-            className='student__photo'
-            src={student}
-            alt='Фото студента'
-          />
+          <img className='student__photo' src={student} alt='Фото студента' />
         </div>
       </div>
     </section>

@@ -1,0 +1,87 @@
+.header {
+  background: #202020;
+}
+
+.header__container {
+  justify-content: start;
+}
+
+.navigate {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.navigate__list {
+  display: flex;
+  list-style-type: none;
+  margin: 0 0 0 44px;
+  padding: 0;
+}
+
+.navigate__item:first-of-type {
+  margin-right: 16px;
+}
+
+.navigate__movies {
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.navigate__save-movies {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.navigate__account {
+  display: inline-block;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 114%;
+  text-decoration: none;
+  color: #fff;
+  background: #313131;
+}
+
+.navigate__button-open {
+  display: none;
+  border: none;
+  padding: 0;
+  width: 44px;
+  height: 44px;
+  font: inherit;
+  color: inherit;
+  background-image: url(../../../images/burger.svg);
+  background-color: transparent;
+}
+
+@media screen and (max-width: 768px) {
+  .navigate__button-open {
+    display: block;
+  }
+
+  .navigate {
+    display: none;
+  }
+
+  .header__container {
+    justify-content: space-between;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .navigate__button-open {
+    margin-right: 10px;
+    width: 30px;
+    height: 43px;
+  }
+}
