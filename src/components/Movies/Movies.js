@@ -17,6 +17,7 @@ function Movies() {
         <SearchForm />
         <MoviesCardList />
         <Footer />
+
       </main>
     </>
   );
