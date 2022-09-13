@@ -3,10 +3,11 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import data from '../../../utils/data';
 import { useState, useEffect } from 'react';
 
-function MoviesCardList() {
+function MoviesCardList({ type, size }) {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
+    if (size === 3) return setMovies(data.slice(0, 3));
     const windowSize = window.innerWidth;
     if (windowSize <= 320) {
       return setMovies(data.slice(0, 5));
@@ -16,6 +17,10 @@ function MoviesCardList() {
       return setMovies(data);
     }
   }, [data]);
+
+  let hiddenButton = `movies-list__button ${
+    type === 'save' ? 'movies-list__button_hidden' : ''
+  }`;
 
   return (
     <section className='movies-list'>
@@ -27,11 +32,12 @@ function MoviesCardList() {
               name={movie.nameRU}
               duration={movie.duration}
               thumbnail={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
+              type={type}
             />
           );
         })}
       </ul>
-      <button type='button' className='movies-list__button'>
+      <button type='button' className={hiddenButton}>
         Еще
       </button>
     </section>

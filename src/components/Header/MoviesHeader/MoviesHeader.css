@@ -1,11 +1,3 @@
-.header {
-  background: #202020;
-}
-
-.header__container {
-  justify-content: start;
-}
-
 .navigate {
   display: flex;
   align-items: center;

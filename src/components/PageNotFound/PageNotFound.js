@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './PageNotFound.css';
 
 function PageNotFound() {
@@ -6,9 +7,9 @@ function PageNotFound() {
       <div className='page-not-found__container'>
         <h2 className='page-not-found__title'>404</h2>
         <p className='page-not-found__text'>Страница не найдена</p>
-        <a href='#' className='page-not-found__link'>
+        <Link className='page-not-found__link' to={-1}>
           Назад
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -1,10 +1,11 @@
 import './Header.css';
+import { Link } from 'react-router-dom';
 
-function Header({ children }) {
+function Header({ children, color, location }) {
   return (
-    <header className='header'>
-      <div className='header__container'>
-        <a className='header__logo' href='#' />
+    <header className={`header ${color}`}>
+      <div className={`header__container ${location}`}>
+        <Link to='/' className='header__logo'></Link>
         {children}
       </div>
     </header>

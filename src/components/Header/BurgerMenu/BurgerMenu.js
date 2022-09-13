@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './BurgerMenu.css';
 
 function BurgerMenu({ isOpen, isClose }) {
@@ -10,13 +11,19 @@ function BurgerMenu({ isOpen, isClose }) {
           type='button'
         />
         <nav className='burger-menu__link-wrapper'>
-          <a className='burger-menu__link' href='#'>Главная</a>
-          <a className='burger-menu__link' href='#'>Фильмы</a>
-          <a className='burger-menu__link' href='#'>Сохраненные фильмы</a>
+          <Link to='/' className='burger-menu__link'>
+            Главная
+          </Link>
+          <Link to='/movies' className='burger-menu__link'>
+            Фильмы
+          </Link>
+          <Link to='/saved-movies' className='burger-menu__link'>
+            Сохраненные фильмы
+          </Link>
         </nav>
-        <button className='burger-menu__btn-profile' type='button' >
+        <Link to='/saved-movies' className='burger-menu__btn-profile'>
           Аккаунт
-        </button>
+        </Link>
       </div>
     </div>
   );

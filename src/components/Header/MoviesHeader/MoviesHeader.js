@@ -1,5 +1,6 @@
-import { useState } from 'react';
 import BurgerMenu from '../BurgerMenu/BurgerMenu';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './MoviesHeader.css';
 
 function MoviesHeader() {
@@ -12,19 +13,19 @@ function MoviesHeader() {
       <nav className='navigate'>
         <ul className='navigate__list'>
           <li className='navigate__item'>
-            <a href='#' className='navigate__movies'>
+            <Link to='/movies' className='navigate__movies'>
               Фильмы
-            </a>
+            </Link>
           </li>
           <li className='navigate__item'>
-            <a href='#' className='navigate__save-movies'>
+            <Link to='/saved-movies' className='navigate__movies'>
               Сохранённые фильмы
-            </a>
+            </Link>
           </li>
         </ul>
-        <a href='#' className='navigate__account'>
+        <Link to='/profile' className='navigate__account'>
           Аккаунт
-        </a>
+        </Link>
       </nav>
       <button
         className='navigate__button-open'

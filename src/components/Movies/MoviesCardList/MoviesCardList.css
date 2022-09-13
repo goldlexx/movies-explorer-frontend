@@ -37,6 +37,10 @@
   opacity: 0.8;
 }
 
+.movies-list__button_hidden {
+  display: none;
+}
+
 @media screen and (max-width: 1279px) {
   .movies-list__button {
     max-width: 708px;
