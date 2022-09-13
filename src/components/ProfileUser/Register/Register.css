@@ -1,0 +1,160 @@
+.register {
+  height: 100vh;
+  background: #202020;
+}
+
+.register__container {
+  margin: 0 auto;
+  padding: 70px 0 0;
+  max-width: 396px;
+}
+
+.register__header {}
+
+.register__logo {
+  display: inline-block;
+  margin-bottom: 40px;
+  width: 40px;
+  height: 38px;
+  background: url(../../../images/logo.svg) no-repeat;
+}
+
+.register__title {
+  margin: 0 0 40px;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 29px;
+}
+
+.register__content {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.register__label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #8b8b8b;
+}
+
+.register__input {
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 8px;
+  padding: 0 15px;
+  width: 100%;
+  height: 46px;
+  box-sizing: border-box;
+  color: #fff;
+  background: #2f2f2f;
+}
+
+.register__input_color_red {
+  color: red;
+}
+
+.register__input:focus {
+  outline: none;
+  border: 1px solid white;
+}
+
+.register__error {
+  display: block;
+  margin: 10px 0 69px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+}
+
+.register__submit-button {
+  margin-bottom: 16px;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+  height: 45px;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #fff;
+  background: #4285f4;
+  cursor: pointer;
+}
+
+.register__submit-button:active {
+  transform: translateY(2px);
+}
+
+.question {
+  display: flex;
+  justify-content: center;
+}
+
+.question__text {
+  margin: 0 6px 0 0;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #8b8b8b;
+}
+
+.question__login {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  color: #4285f4;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 470px) {
+  .register__container {
+    margin: 0 auto;
+    padding-top: 56px;
+    max-width: 260px;
+  }
+
+  .register__logo {
+    display: block;
+    margin: 0 auto 50px;
+    width: 38px;
+  }
+
+  .register__title {
+    margin: 0 0 80px;
+    text-align: center;
+  }
+
+  .register__error {
+    margin-bottom: 157px;
+  }
+
+  .register__submit-button {
+    margin-bottom: 14px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .question {
+    display: flex;
+    justify-content: center;
+  }
+
+  .question__text {
+    margin: 0 7px 0 0;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .question__login {
+    font-size: 12px;
+    line-height: 15px;
+  }
+}
