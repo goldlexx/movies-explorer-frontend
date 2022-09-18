@@ -1,25 +1,21 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import data from '../../../utils/data';
-import { useState, useEffect } from 'react';
+// import data from '../../../utils/data';
+import { useState } from 'react';
 
-function MoviesCardList({ type, size }) {
-  const [movies, setMovies] = useState([]);
+function MoviesCardList({ movies, isNotFound, isFailed }) {
+  const [hiddenButton, setHiddenButton] = useState(true);
 
-  useEffect(() => {
-    if (size === 3) return setMovies(data.slice(0, 3));
-    const windowSize = window.innerWidth;
-    if (windowSize <= 320) {
-      return setMovies(data.slice(0, 5));
-    } else if (windowSize <= 768) {
-      return setMovies(data.slice(0, 8));
-    } else {
-      return setMovies(data);
-    }
-  }, [data]);
+  let classTextNotFound = isNotFound
+    ? 'movies-list__not-found_visible'
+    : 'movies-list__not-found';
 
-  let hiddenButton = `movies-list__button ${
-    type === 'save' ? 'movies-list__button_hidden' : ''
+  let classTextError = isFailed && !isNotFound
+    ? 'movies-list__error_visible'
+    : 'movies-list__error';
+
+  let buttonStatus = `movies-list__button ${
+    hiddenButton && 'movies-list__button_hidden'
   }`;
 
   return (
@@ -32,12 +28,16 @@ function MoviesCardList({ type, size }) {
               name={movie.nameRU}
               duration={movie.duration}
               thumbnail={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
-              type={type}
             />
           );
         })}
+        <h2 className={classTextNotFound}>Ничего не найдено</h2>
+        <h2 className={classTextError}>
+          Во время запроса произошла ошибка. Возможно, проблема с соединением
+          или сервер недоступен. Подождите немного и попробуйте ещё раз
+        </h2>
       </ul>
-      <button type='button' className={hiddenButton}>
+      <button type='button' className={buttonStatus}>
         Еще
       </button>
     </section>

@@ -41,6 +41,31 @@
   display: none;
 }
 
+.movies-list__not-found {
+  display: none;
+}
+
+.movies-list__not-found_visible {
+  display: block;
+  margin: 0;
+  font-size: 20px;
+  text-align: center;
+  color: #12ec87;
+}
+
+.movies-list__error {
+  display: none;
+}
+
+.movies-list__error_visible {
+  display: block;
+  margin: 0;
+  font-size: 13px;
+  text-align: center;
+  font-weight: 400;
+  color: #12ec87;
+}
+
 @media screen and (max-width: 1279px) {
   .movies-list__button {
     max-width: 708px;
@@ -50,6 +75,10 @@
 @media screen and (max-width: 767px) {
   .movies-list__button {
     max-width: 300px;
+  }
+
+  .movies-list__not-found {
+    font-size: 15px;
   }
 }
 

@@ -15,6 +15,11 @@
   width: 40px;
   height: 38px;
   background: url(../../../images/logo.svg) no-repeat;
+  transition: opacity 0.3s linear;
+}
+
+.login__logo:hover {
+  opacity: 0.8;
 }
 
 .login__title {
@@ -68,7 +73,12 @@
   text-align: center;
   color: #fff;
   background: #4285f4;
+  transition: opacity 0.3s linear;
   cursor: pointer;
+}
+
+.login__submit-button:hover {
+opacity: 0.8;
 }
 
 .login__submit-button:active {

@@ -15,7 +15,7 @@ function SavedMovies() {
       </Header>
       <main className='save-movies'>
         <SearchForm></SearchForm>
-        <MoviesCardList type='save' size={3}></MoviesCardList>
+        <MoviesCardList></MoviesCardList>
       </main>
       <Footer></Footer>
     </>

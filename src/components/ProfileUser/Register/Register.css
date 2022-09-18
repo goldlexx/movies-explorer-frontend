@@ -9,14 +9,17 @@
   max-width: 396px;
 }
 
-.register__header {}
-
 .register__logo {
   display: inline-block;
   margin-bottom: 40px;
   width: 40px;
   height: 38px;
   background: url(../../../images/logo.svg) no-repeat;
+  transition: opacity 0.3s linear;
+}
+
+.register__logo:hover {
+  opacity: 0.8;
 }
 
 .register__title {
@@ -83,7 +86,12 @@
   text-align: center;
   color: #fff;
   background: #4285f4;
+  transition: opacity 0.3s linear;
   cursor: pointer;
+}
+
+.register__submit-button:hover {
+  opacity: 0.8;
 }
 
 .register__submit-button:active {
@@ -110,7 +118,12 @@
   line-height: 17px;
   text-align: center;
   color: #4285f4;
+  transition: opacity 0.3s linear;
   cursor: pointer;
+}
+
+.question__login:hover {
+  opacity: 0.7;
 }
 
 @media screen and (max-width: 470px) {

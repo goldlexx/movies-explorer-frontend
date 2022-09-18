@@ -14,7 +14,13 @@
   line-height: 133%;
   text-decoration: none;
   color: #fff;
+  transition: opacity 0.3s linear;
 }
+
+.auth-links__registration:hover {
+  opacity: 0.7;
+}
+
 
 .auth-links__login {
   border-radius: 3px;
