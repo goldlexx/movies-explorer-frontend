@@ -60,9 +60,9 @@
 .movies-list__error_visible {
   display: block;
   margin: 0;
+  font-weight: 400;
   font-size: 13px;
   text-align: center;
-  font-weight: 400;
   color: #12ec87;
 }
 

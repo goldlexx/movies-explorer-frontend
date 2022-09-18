@@ -20,8 +20,8 @@ function App() {
   const [searchKeyword, setSearchKeyword] = useState(
     localStorage.getItem('searchKeyword') || ''
   );
-  const [filteкMovies, setFilterMovies] = useState(
-    JSON.parse(localStorage.getItem('filterMovies')) || []
+  const [filteredMovies, setFilteredMovies] = useState(
+    JSON.parse(localStorage.getItem('filteredMovies')) || []
   );
   const [checked, setChecked] = useState(false);
 
@@ -52,8 +52,9 @@ function App() {
     const newMovies = searchMovies(allMovies, name);
 
     localStorage.setItem('searchKeyword', name);
+    localStorage.setItem('filteredMovies', JSON.stringify(newMovies));
     setSearchKeyword(name);
-
+    setFilteredMovies(newMovies);
     setIsNotFound(!newMovies.length && !isFailed);
     setMovies(newMovies);
     setTimeout(() => setIsLoading(false), 1000);
@@ -73,6 +74,13 @@ function App() {
         setIsFailed(true);
         console.log(err);
       });
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.filteredMovies) {
+      setMovies(filteredMovies);
+
+    }
   }, []);
 
   return (

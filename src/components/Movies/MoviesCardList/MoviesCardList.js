@@ -1,27 +1,60 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-// import data from '../../../utils/data';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function MoviesCardList({ movies, isNotFound, isFailed }) {
-  const [hiddenButton, setHiddenButton] = useState(true);
+  const [moviesToLoad, setMoviesToLoad] = useState(0);
+  const [displayedMovies, setDisplayedMovies] = useState(0);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const location = useLocation();
+
+  const handleShowMoreMovies = () => {
+    setDisplayedMovies((movies) => movies + moviesToLoad);
+  };
+
+  useEffect(() => {
+    const handleWindowResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleWindowResize);
+
+    if (location.pathname === '/movies') {
+      if (windowWidth <= 480) {
+        setDisplayedMovies(5);
+        setMoviesToLoad(2);
+      } else if (windowWidth <= 990 && windowWidth > 480) {
+        setDisplayedMovies(8);
+        setMoviesToLoad(3);
+      } else if (windowWidth <= 1280 && windowWidth > 990) {
+        setDisplayedMovies(16);
+        setMoviesToLoad(4);
+      } else if (windowWidth > 1280) {
+        setDisplayedMovies(16);
+        setMoviesToLoad(4);
+      }
+    }
+  }, [windowWidth, location]);
 
   let classTextNotFound = isNotFound
     ? 'movies-list__not-found_visible'
     : 'movies-list__not-found';
 
-  let classTextError = isFailed && !isNotFound
-    ? 'movies-list__error_visible'
-    : 'movies-list__error';
+  let classTextError =
+    isFailed && !isNotFound
+      ? 'movies-list__error_visible'
+      : 'movies-list__error';
 
-  let buttonStatus = `movies-list__button ${
-    hiddenButton && 'movies-list__button_hidden'
-  }`;
+  let buttonStatus =
+    !(movies.length > 4) || displayedMovies >= movies.length
+      ? 'movies-list__button_hidden'
+      : 'movies-list__button';
 
   return (
     <section className='movies-list'>
       <ul className='movies-list__container'>
-        {movies.map((movie) => {
+        {movies.slice(0, displayedMovies).map((movie) => {
           return (
             <MoviesCard
               key={movie.id}
@@ -37,7 +70,11 @@ function MoviesCardList({ movies, isNotFound, isFailed }) {
           или сервер недоступен. Подождите немного и попробуйте ещё раз
         </h2>
       </ul>
-      <button type='button' className={buttonStatus}>
+      <button
+        type='button'
+        className={buttonStatus}
+        onClick={handleShowMoreMovies}
+      >
         Еще
       </button>
     </section>
