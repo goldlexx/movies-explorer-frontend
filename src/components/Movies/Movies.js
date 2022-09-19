@@ -13,9 +13,15 @@ function Movies({
   isFailed,
   isNotFound,
   searchKeyword,
+  savedMovies,
+  onSave,
+  onDelete,
   onCheckbox,
   checked,
+  localCheckbox
 }) {
+
+
   return (
     <>
       <Header
@@ -30,7 +36,9 @@ function Movies({
           searchKeyword={searchKeyword}
           onCheckbox={onCheckbox}
           checked={checked}
+          localCheckbox={localCheckbox}
         />
+
         {isLoading ? (
           <Preloader />
         ) : (
@@ -39,6 +47,11 @@ function Movies({
             isNotFound={isNotFound}
             isFailed={isFailed}
             searchKeyword={searchKeyword}
+            savedMovies={savedMovies}
+            onSave={onSave}
+            onDelete={onDelete}
+            onCheckbox={onCheckbox}
+            checked={checked}
           />
         )}
       </main>

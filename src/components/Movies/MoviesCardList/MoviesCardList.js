@@ -3,14 +3,27 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-function MoviesCardList({ movies, isNotFound, isFailed }) {
+function MoviesCardList({
+  movies,
+  isNotFound,
+  isFailed,
+  savedMovies,
+  onSave,
+  onDelete,
+  checked,
+}) {
   const [moviesToLoad, setMoviesToLoad] = useState(0);
   const [displayedMovies, setDisplayedMovies] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
   const location = useLocation();
 
   const handleShowMoreMovies = () => {
     setDisplayedMovies((movies) => movies + moviesToLoad);
+  };
+
+  const searchShortMovies = (movies) => {
+    return movies.filter((item) => item.duration <= 40);
   };
 
   useEffect(() => {
@@ -51,32 +64,76 @@ function MoviesCardList({ movies, isNotFound, isFailed }) {
       ? 'movies-list__button_hidden'
       : 'movies-list__button';
 
+  let moviesBlock = location.pathname === '/movies';
+
+  let moviesFilterArr = !checked ? searchShortMovies(movies) : movies;
+  let saveMoviesFilterArr = !checked ? searchShortMovies(savedMovies) : savedMovies;
+
   return (
     <section className='movies-list'>
-      <ul className='movies-list__container'>
-        {movies.slice(0, displayedMovies).map((movie) => {
-          return (
-            <MoviesCard
-              key={movie.id}
-              name={movie.nameRU}
-              duration={movie.duration}
-              thumbnail={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
-            />
-          );
-        })}
-        <h2 className={classTextNotFound}>Ничего не найдено</h2>
-        <h2 className={classTextError}>
-          Во время запроса произошла ошибка. Возможно, проблема с соединением
-          или сервер недоступен. Подождите немного и попробуйте ещё раз
-        </h2>
-      </ul>
-      <button
-        type='button'
-        className={buttonStatus}
-        onClick={handleShowMoreMovies}
-      >
-        Еще
-      </button>
+      {moviesBlock ? (
+        <>
+          <ul className='movies-list__container'>
+
+            { moviesFilterArr.slice(0, displayedMovies).map((movie) => {
+              return (
+                <MoviesCard
+                  key={movie.id}
+                  name={movie.nameRU}
+                  duration={movie.duration}
+                  trailerLink={movie.trailerLink}
+                  thumbnail={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
+                  savedMovies={savedMovies}
+                  onSave={onSave}
+                  onDelete={onDelete}
+                  movie={movie}
+                />
+              );
+            })}
+            <h2 className={classTextNotFound}>
+              {movies.length === 0 ? 'Ничего не найдено' : ''}
+            </h2>
+            <h2 className={classTextError}>
+              {movies.length === 0
+                ? 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+                : ''}
+            </h2>
+          </ul>
+          <button
+            type='button'
+            className={buttonStatus}
+            onClick={handleShowMoreMovies}
+          >
+            Еще
+          </button>
+        </>
+      ) : (
+        <ul className='movies-list__container'>
+          {saveMoviesFilterArr.map((movie) => {
+            return (
+              <MoviesCard
+                key={movie._id}
+                name={movie.nameRU}
+                duration={movie.duration}
+                trailerLink={movie.trailerLink}
+                thumbnail={movie.thumbnail}
+                savedMovies={savedMovies}
+                onSave={onSave}
+                onDelete={onDelete}
+                movie={movie}
+              />
+            );
+          })}
+          <h2 className={classTextNotFound}>
+            {savedMovies.length === 0 ? 'Ничего не найдено' : ''}
+          </h2>
+          <h2 className={classTextError}>
+            {savedMovies.length === 0
+              ? 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+              : ''}
+          </h2>
+        </ul>
+      )}
     </section>
   );
 }
