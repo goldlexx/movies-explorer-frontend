@@ -15,9 +15,7 @@ class MainApi {
     return fetch(`${this._url}/movies`, {
       headers: {
         'Content-type': 'application/json',
-        // 'Authorization': `Bearer ${localStorage.getItem('jwt')}`
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzI4MGZjN2YxN2MyNjc3MGFmYzc2ODAiLCJpYXQiOjE2NjM1Njk4ODAsImV4cCI6MTY2NDE3NDY4MH0.8iCICV3WwblFn_1Dw8HZ8JIcRzJI8-qByb5oxDdcq9E',
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
     }).then((res) => {
       return this.checkError(res);
@@ -29,9 +27,7 @@ class MainApi {
       method: 'POST',
       headers: {
         'Content-type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzI4MGZjN2YxN2MyNjc3MGFmYzc2ODAiLCJpYXQiOjE2NjM1Njk4ODAsImV4cCI6MTY2NDE3NDY4MH0.8iCICV3WwblFn_1Dw8HZ8JIcRzJI8-qByb5oxDdcq9E',
-        // Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
       },
       body: JSON.stringify({
         country: movie.country,
@@ -56,14 +52,14 @@ class MainApi {
       method: 'DELETE',
       headers: {
         'Content-type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzI4MGZjN2YxN2MyNjc3MGFmYzc2ODAiLCJpYXQiOjE2NjM1Njk4ODAsImV4cCI6MTY2NDE3NDY4MH0.8iCICV3WwblFn_1Dw8HZ8JIcRzJI8-qByb5oxDdcq9E',
-        // 'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
       },
     }).then((res) => {
       return this.checkError(res);
     });
   }
+
+
 }
 
 const mainApi = new MainApi({

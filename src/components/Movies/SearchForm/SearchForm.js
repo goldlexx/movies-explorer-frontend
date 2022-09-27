@@ -3,7 +3,13 @@ import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import './SearchForm.css';
 
-function SearchForm({ onSubmit, searchKeyword, onCheckbox, checked, localCheckbox }) {
+function SearchForm({
+  onSubmit,
+  searchKeyword,
+  onCheckbox,
+  checked,
+  localCheckbox,
+}) {
   const [errorText, setErrorText] = useState('');
   const [keyword, setKeyword] = useState('');
   const [isFormValid, setIsFormValid] = useState(false);
@@ -53,7 +59,11 @@ function SearchForm({ onSubmit, searchKeyword, onCheckbox, checked, localCheckbo
           <span className='search__error'>{!isFormValid && errorText}</span>
         </form>
 
-        <Checkbox onCheckbox={onCheckbox} checked={checked} localCheckbox={localCheckbox}></Checkbox>
+        <Checkbox
+          onCheckbox={onCheckbox}
+          checked={checked}
+          localCheckbox={localCheckbox}
+        ></Checkbox>
       </div>
     </section>
   );

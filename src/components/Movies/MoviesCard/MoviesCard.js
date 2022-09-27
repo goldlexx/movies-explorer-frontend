@@ -21,6 +21,7 @@ function MoviesCard({
     : 'movies-card__button';
 
   const handleSaveClick = () => {
+    console.log(isSaved);
     if (isSaved) {
       onDelete(savedMovies.filter((m) => m.movieId === movie.id)[0]);
     } else {

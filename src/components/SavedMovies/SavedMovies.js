@@ -18,6 +18,7 @@ function SavedMovies({
   savedMovies,
   onSave,
   onDelete,
+  allSavedMovies,
 }) {
   return (
     <>
@@ -45,6 +46,7 @@ function SavedMovies({
             savedMovies={savedMovies}
             onSave={onSave}
             onDelete={onDelete}
+            allSavedMovies={allSavedMovies}
           ></MoviesCardList>
         )}
       </main>

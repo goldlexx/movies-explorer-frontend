@@ -11,11 +11,11 @@ function MoviesCardList({
   onSave,
   onDelete,
   checked,
+  allSavedMovies,
 }) {
   const [moviesToLoad, setMoviesToLoad] = useState(0);
   const [displayedMovies, setDisplayedMovies] = useState(0);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
   const location = useLocation();
 
   const handleShowMoreMovies = () => {
@@ -23,8 +23,15 @@ function MoviesCardList({
   };
 
   const searchShortMovies = (movies) => {
-    return movies.filter((item) => item.duration <= 40);
+    const searchShortMoviesArr = movies.slice(0);
+    return searchShortMoviesArr.filter((item) => item.duration <= 40);
   };
+
+  let saveMoviesFilterArr = !checked
+    ? searchShortMovies(savedMovies)
+    : savedMovies;
+
+  let moviesFilterArr = !checked ? searchShortMovies(movies) : movies;
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -50,9 +57,10 @@ function MoviesCardList({
     }
   }, [windowWidth, location]);
 
-  let classTextNotFound = isNotFound
-    ? 'movies-list__not-found_visible'
-    : 'movies-list__not-found';
+  let classTextNotFound =
+    isNotFound || moviesFilterArr.length === 0
+      ? 'movies-list__not-found_visible'
+      : 'movies-list__not-found';
 
   let classTextError =
     isFailed && !isNotFound
@@ -66,16 +74,12 @@ function MoviesCardList({
 
   let moviesBlock = location.pathname === '/movies';
 
-  let moviesFilterArr = !checked ? searchShortMovies(movies) : movies;
-  let saveMoviesFilterArr = !checked ? searchShortMovies(savedMovies) : savedMovies;
-
   return (
     <section className='movies-list'>
       {moviesBlock ? (
         <>
           <ul className='movies-list__container'>
-
-            { moviesFilterArr.slice(0, displayedMovies).map((movie) => {
+            {moviesFilterArr.slice(0, displayedMovies).map((movie) => {
               return (
                 <MoviesCard
                   key={movie.id}
@@ -87,14 +91,15 @@ function MoviesCardList({
                   onSave={onSave}
                   onDelete={onDelete}
                   movie={movie}
+                  allSavedMovies={allSavedMovies}
                 />
               );
             })}
             <h2 className={classTextNotFound}>
-              {movies.length === 0 ? 'Ничего не найдено' : ''}
+              {moviesFilterArr.length === 0 ? 'Ничего не найдено' : ''}
             </h2>
             <h2 className={classTextError}>
-              {movies.length === 0
+              {moviesFilterArr.length === 0
                 ? 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
                 : ''}
             </h2>
@@ -121,6 +126,7 @@ function MoviesCardList({
                 onSave={onSave}
                 onDelete={onDelete}
                 movie={movie}
+                allSavedMovies={allSavedMovies}
               />
             );
           })}

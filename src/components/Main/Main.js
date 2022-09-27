@@ -7,16 +7,26 @@ import Techs from '../Main/Techs/Techs';
 import AboutMe from '../Main/AboutMe/AboutMe';
 import Portfolio from '../Main/Portfolio/Portfolio';
 import Footer from '../Footer/Footer';
+import MoviesHeader from '../Header/MoviesHeader/MoviesHeader';
 
-function Main() {
+function Main({ isLoggedIn }) {
   return (
     <>
-      <Header
-        color={'header__theme_blue'}
-        location={'header__container_landing'}
-      >
-        <MainHeader />
-      </Header>
+      {isLoggedIn ? (
+        <Header
+          color={'header__theme_blue'}
+          location={'header__container_movies'}
+        >
+          <MoviesHeader />
+        </Header>
+      ) : (
+        <Header
+          color={'header__theme_blue'}
+          location={'header__container_landing'}
+        >
+          <MainHeader />
+        </Header>
+      )}
       <main className='landing'>
         <Promo />
         <NavTab />

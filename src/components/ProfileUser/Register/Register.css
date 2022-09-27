@@ -45,7 +45,7 @@
 }
 
 .register__input {
-  margin-bottom: 20px;
+  margin-bottom: 7px;
   border: none;
   border-radius: 8px;
   padding: 0 15px;
@@ -56,26 +56,14 @@
   background: #2f2f2f;
 }
 
-.register__input_color_red {
-  color: red;
-}
-
 .register__input:focus {
   outline: none;
   border: 1px solid white;
 }
 
-.register__error {
-  display: block;
-  margin: 10px 0 69px;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 12px;
-  color: #ee3465;
-}
-
 .register__submit-button {
-  margin-bottom: 16px;
+  position: relative;
+  margin: 0 0 16px;
   border: none;
   border-radius: 3px;
   width: 100%;
@@ -96,6 +84,12 @@
 
 .register__submit-button:active {
   transform: translateY(2px);
+}
+
+.register__submit-button:disabled {
+  color: #c2c2c2;
+  background: #f8f8f8;
+  pointer-events: none;
 }
 
 .question {
@@ -126,6 +120,24 @@
   opacity: 0.7;
 }
 
+.register__error {
+  display: block;
+  margin-bottom: 15px;
+  min-height: 24px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.register__error_visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 @media screen and (max-width: 470px) {
   .register__container {
     margin: 0 auto;
@@ -145,7 +157,7 @@
   }
 
   .register__error {
-    margin-bottom: 157px;
+    margin-bottom: 10px;
   }
 
   .register__submit-button {
