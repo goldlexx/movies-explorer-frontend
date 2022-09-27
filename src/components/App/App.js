@@ -43,6 +43,10 @@ function App() {
     JSON.parse(localStorage.getItem('checkbox')) || checked
   );
 
+    useEffect(() => {
+      tokenCheck();
+    }, []);
+
   useEffect(() => {
     moviesApi
       .getAllMovies()
@@ -59,22 +63,13 @@ function App() {
     if (loggedIn) {
       mainApi
         .getSavedMovies()
-        .then((savedMovieData) => {
-          localStorage.setItem('savedMovies', JSON.stringify(savedMovies));
-          const userSavedMovies = savedMovieData.filter((movie) => {
-            return movie.owner === currentUser._id;
-          });
-          setSavedMovies(userSavedMovies);
-          setAllSavedMovies(userSavedMovies);
+        .then((res) => {
+          setSavedMovies(res);
+          localStorage.setItem('savedMovies', JSON.stringify(res));
         })
         .catch((err) => {
           console.log(err);
         });
-    }
-  }, [currentUser._id]);
-
-  useEffect(() => {
-    if (loggedIn) {
       apiAuth
         .getUserInfo()
         .then((data) => {
@@ -91,16 +86,15 @@ function App() {
     }
   }, [loggedIn, filteredMovies]);
 
-  useEffect(() => {
-    tokenCheck();
-  }, []);
 
   const tokenCheck = () => {
     const jwt = localStorage.getItem('jwt');
+
     if (jwt) {
       apiAuth
         .checkToken(jwt)
         .then((res) => {
+          console.log(res);
           if (res) {
             setLoggedIn(true);
           }
@@ -161,8 +155,10 @@ function App() {
     setMovies(searchArr);
     setIsNotFound(!movies.length && !isFailed);
     localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
+    setFilteredMovies(searchArr);
     localStorage.setItem('searchKeyword', name);
     localStorage.setItem('checkbox', checked);
+    setSearchKeyword(name);
     setTimeout(() => setIsLoading(false), 1000);
   };
 

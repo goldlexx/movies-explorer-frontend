@@ -3,7 +3,6 @@
 ## [Ссылка на макет в figma ⬅️](https://disk.yandex.ru/d/7eaSpw3ScES4tA)
 ## [Ссылка на pull request ⬅️](https://github.com/goldlexx/movies-explorer-frontend/pull/2)
 
-
 * Верстка
   - Cовременная верстка с использованием Flexbox и Grid Layout
   - Семантическая верстка

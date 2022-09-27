@@ -9,10 +9,10 @@ import Portfolio from '../Main/Portfolio/Portfolio';
 import Footer from '../Footer/Footer';
 import MoviesHeader from '../Header/MoviesHeader/MoviesHeader';
 
-function Main({ isLoggedIn }) {
+function Main({ loggedIn }) {
   return (
     <>
-      {isLoggedIn ? (
+      {loggedIn ? (
         <Header
           color={'header__theme_blue'}
           location={'header__container_movies'}

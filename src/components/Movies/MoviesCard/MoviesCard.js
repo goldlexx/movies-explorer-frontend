@@ -11,6 +11,7 @@ function MoviesCard({
   onDelete,
   movie,
 }) {
+
   const location = useLocation();
   let hours = Math.floor(duration / 60);
   let minutes = Math.floor(duration - hours * 60);
@@ -21,7 +22,6 @@ function MoviesCard({
     : 'movies-card__button';
 
   const handleSaveClick = () => {
-    console.log(isSaved);
     if (isSaved) {
       onDelete(savedMovies.filter((m) => m.movieId === movie.id)[0]);
     } else {
