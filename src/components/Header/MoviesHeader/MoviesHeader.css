@@ -80,6 +80,10 @@
   background-color: transparent;
 }
 
+.active {
+  color: #3ddc84;
+}
+
 @media screen and (max-width: 768px) {
   .navigate__button-open {
     display: block;

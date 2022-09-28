@@ -158,7 +158,10 @@ function App() {
 
   const handleSearchMovies = (name) => {
     setIsLoading(true);
-    const searchArr = searchMovies(JSON.parse(localStorage.getItem('allMovies')), name);
+    const searchArr = searchMovies(
+      JSON.parse(localStorage.getItem('allMovies')),
+      name
+    );
     console.log(searchArr);
     setMovies(searchArr);
     setIsNotFound(!movies.length && !isFailed);
@@ -247,7 +250,7 @@ function App() {
         console.error(err);
       })
       .finally(() => {
-        setTimeout(() =>  setIsMessageProfile(false), 1000);
+        setTimeout(() => setIsMessageProfile(false), 1000);
       });
   };
 

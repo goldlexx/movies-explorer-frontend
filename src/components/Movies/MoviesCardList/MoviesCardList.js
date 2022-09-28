@@ -34,13 +34,14 @@ function MoviesCardList({
 
   let moviesFilterArr = !checked ? searchShortMovies(movies) : movies;
 
-
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowWidth(window.innerWidth);
+      window.addEventListener('resize', handleWindowResize);
+      return () => {
+        window.removeEventListener('resize', handleWindowResize);
+      };
     };
-
-    window.addEventListener('resize', handleWindowResize);
 
     if (location.pathname === '/movies') {
       if (windowWidth <= 480) {
