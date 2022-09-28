@@ -25,9 +25,9 @@ function App() {
   const [isRegisterMessage, setRegisterMessage] = useState(false);
   const [isLoginMessage, setLoginMessage] = useState(false);
   const [isErrorLoginBtn, setIsErrorLoginBtn] = useState(false);
-  const [allMovies, setAllMovies] = useState([]);
+  // const [allMovies, setAllMovies] = useState([]);
   const [movies, setMovies] = useState([]);
-  const [allSavedMovies, setAllSavedMovies] = useState([]);
+
   const [savedMovies, setSavedMovies] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -50,6 +50,13 @@ function App() {
     JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
   );
 
+
+  const [allSavedMovies, setAllSavedMovies] = useState([]);
+
+  const [allMovies, setAllMovies] = useState(
+    JSON.parse(localStorage.getItem('allMovies')) || []
+  );
+
     useEffect(() => {
       tokenCheck();
     }, []);
@@ -58,7 +65,7 @@ function App() {
     moviesApi
       .getAllMovies()
       .then((movies) => {
-        setAllMovies(movies);
+        localStorage.setItem('allMovies', JSON.stringify(movies));
       })
       .catch((err) => {
         setIsFailed(true);
@@ -256,7 +263,6 @@ function App() {
     setRegisterMessage(false);
     setLoginMessage(false);
     setIsErrorLoginBtn(false);
-    setAllMovies([]);
     setIsLoading(false);
     setIsFailed(false);
     setMovies([]);
