@@ -41,7 +41,7 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
                 <input
                   type='text'
                   name='name'
-                  placeholder='Виталий'
+                  placeholder='Имя'
                   autoComplete='off'
                   className='register__input'
                   minLength='5'
