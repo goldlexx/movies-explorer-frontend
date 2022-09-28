@@ -48,12 +48,6 @@ function App() {
     JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
   );
 
-
-
-  // const [allMovies, setAllMovies] = useState(
-  //   JSON.parse(localStorage.getItem('allMovies')) || []
-  // );
-
   useEffect(() => {
     tokenCheck();
   }, []);
@@ -62,7 +56,10 @@ function App() {
     moviesApi
       .getAllMovies()
       .then((movies) => {
-        localStorage.setItem('allMovies', JSON.stringify(movies));
+        const before = movies.slice(0, 23);
+        const after = movies.slice(24);
+        const arrMovies = before.concat(after);
+        localStorage.setItem('allMovies', JSON.stringify(arrMovies));
       })
       .catch((err) => {
         setIsFailed(true);
@@ -109,6 +106,7 @@ function App() {
           }
         })
         .catch((err) => {
+          onSignOut();
           console.error(err);
         });
     }
