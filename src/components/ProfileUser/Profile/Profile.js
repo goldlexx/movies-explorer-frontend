@@ -9,7 +9,7 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
   const currentUser = useContext(CurrentUserContext);
   const [isEditInput, setIsEditInput] = useState(true);
   const controlInput = useFormWithValidation();
-  const { name, email } = controlInput.errors;
+  const { nameErr, emailErr } = controlInput.errors;
   const errorClassName = !controlInput.isValid
     ? 'profile__error profile__error_visible'
     : 'profile__error';
@@ -17,13 +17,18 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
   const toggleInput = (e) => {
     e.preventDefault();
     setIsEditInput((state) => !state);
-
   };
+
+  let disableUserCurrentCheck =
+    (currentUser.name === controlInput?.values?.name &&
+      typeof controlInput?.values?.email === 'undefined') ||
+    (currentUser.email === controlInput?.values?.email &&
+      typeof controlInput?.values?.email === 'undefined');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const { name, email } = controlInput.values;
-    if  (!name) {
+    if (!name) {
       onUpdateUser(currentUser.name, email);
     } else if (!email) {
       onUpdateUser(name, currentUser.email);
@@ -34,7 +39,9 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
     controlInput.resetForm();
   };
 
-  let classNameMessageBtn = isMessageProfile ? 'profile__button-msg' : 'profile__button-msg profile__button-msg_hidden';
+  let classNameMessageBtn = isMessageProfile
+    ? 'profile__button-msg'
+    : 'profile__button-msg profile__button-msg_hidden';
 
   return (
     <>
@@ -64,7 +71,7 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
                 {...(!isEditInput ? {} : { disabled: true })}
               />
             </label>
-            <span className={errorClassName}>{name}</span>
+            <span className={errorClassName}>{nameErr}</span>
             <label className='profile__input-container'>
               <span className='profile__input-label'>E-mail</span>
               <input
@@ -81,14 +88,16 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
                 {...(!isEditInput ? {} : { disabled: true })}
               />
             </label>
-            <span className={errorClassName}>{email}</span>
+            <span className={errorClassName}>{emailErr}</span>
 
             {!isEditInput && (
               <>
-                <span className={classNameMessageBtn}>Изменение данных прошло успешно!</span>
+                <span className={classNameMessageBtn}>
+                  Изменение данных прошло успешно!
+                </span>
                 <button
                   className='profile__button'
-                  disabled={!controlInput.isValid}
+                  disabled={disableUserCurrentCheck || !controlInput.isValid}
                 >
                   Сохранить
                 </button>
