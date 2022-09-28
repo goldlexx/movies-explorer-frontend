@@ -34,37 +34,9 @@ function App() {
   const [isMessageProfile, setIsMessageProfile] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
   const [allSavedMovies, setAllSavedMovies] = useState([]);
-  const [searchKeyword, setSearchKeyword] = useState(
-    localStorage.getItem('searchKeyword') || ''
-  );
-  const [filteredMovies, setFilteredMovies] = useState(
-    JSON.parse(localStorage.getItem('filteredMovies')) || []
-  );
-  const [localCheckbox, setLocalCheckbox] = useState(
-    JSON.parse(localStorage.getItem('checkbox')) || checked
-  );
-
-  const [localCheckboxSaveMovies, setLocalCheckboxSaveMovies] = useState(
-    JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
-  );
 
   useEffect(() => {
     tokenCheck();
-  }, []);
-
-  useEffect(() => {
-    moviesApi
-      .getAllMovies()
-      .then((movies) => {
-        const before = movies.slice(0, 23);
-        const after = movies.slice(24);
-        const arrMovies = before.concat(after);
-        localStorage.setItem('allMovies', JSON.stringify(arrMovies));
-      })
-      .catch((err) => {
-        setIsFailed(true);
-        console.log(err);
-      });
   }, []);
 
   useEffect(() => {
@@ -86,13 +58,15 @@ function App() {
           console.error(`Данные пользователя не получены: ${err}`);
         });
 
-      if (filteredMovies) {
-        setMovies(filteredMovies);
-        setChecked(localCheckbox);
-        setCheckedSaveMovies(localCheckboxSaveMovies);
+      if (JSON.parse(localStorage.getItem('filteredMovies'))) {
+        setMovies(JSON.parse(localStorage.getItem('filteredMovies')));
+        setChecked(JSON.parse(localStorage.getItem('checkbox')));
+        setCheckedSaveMovies(
+          JSON.parse(localStorage.getItem('checkboxSaveMovies'))
+        );
       }
     }
-  }, [loggedIn, filteredMovies]);
+  }, [loggedIn]);
 
   const tokenCheck = () => {
     const jwt = localStorage.getItem('jwt');
@@ -103,6 +77,7 @@ function App() {
         .then((res) => {
           if (res) {
             setLoggedIn(true);
+            navigate(location.pathname);
           }
         })
         .catch((err) => {
@@ -145,6 +120,7 @@ function App() {
   const handleChangeCheckbox = (evt) => {
     if (location.pathname === '/movies') {
       setChecked(!checked);
+      localStorage.setItem('checkbox', !checked);
     } else if (location.pathname === '/saved-movies') {
       setCheckedSaveMovies(!checkedSaveMovies);
     }
@@ -157,20 +133,45 @@ function App() {
   };
 
   const handleSearchMovies = (name) => {
-    setIsLoading(true);
-    const searchArr = searchMovies(
-      JSON.parse(localStorage.getItem('allMovies')),
-      name
-    );
-    console.log(searchArr);
-    setMovies(searchArr);
-    setIsNotFound(!movies.length && !isFailed);
-    localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
-    setFilteredMovies(searchArr);
-    localStorage.setItem('searchKeyword', name);
-    localStorage.setItem('checkbox', checked);
-    setSearchKeyword(name);
-    setTimeout(() => setIsLoading(false), 1000);
+    if (!JSON.parse(localStorage.getItem('allMovies'))) {
+      moviesApi
+        .getAllMovies()
+        .then((movies) => {
+          const before = movies.slice(0, 23);
+          const after = movies.slice(24);
+          const arrMovies = before.concat(after);
+          localStorage.setItem('allMovies', JSON.stringify(arrMovies));
+        })
+        .then(() => {
+          setIsLoading(true);
+          const searchArr = searchMovies(
+            JSON.parse(localStorage.getItem('allMovies')),
+            name
+          );
+          setMovies(searchArr);
+          setIsNotFound(!movies.length && !isFailed);
+          localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
+          localStorage.setItem('searchKeyword', name);
+          localStorage.setItem('checkbox', checked);
+          setTimeout(() => setIsLoading(false), 1000);
+        })
+        .catch((err) => {
+          setIsFailed(true);
+          console.log(err);
+        });
+    } else if (JSON.parse(localStorage.getItem('allMovies'))) {
+      setIsLoading(true);
+      const searchArr = searchMovies(
+        JSON.parse(localStorage.getItem('allMovies')),
+        name
+      );
+      setMovies(searchArr);
+      setIsNotFound(!movies.length && !isFailed);
+      localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
+      localStorage.setItem('searchKeyword', name);
+      localStorage.setItem('checkbox', checked);
+      setTimeout(() => setIsLoading(false), 1000);
+    }
   };
 
   const handleSearchSavedMovies = (name) => {
@@ -286,14 +287,13 @@ function App() {
                 isLoading={isLoading}
                 isFailed={isFailed}
                 isNotFound={isNotFound}
-                searchKeyword={searchKeyword}
+                searchKeyword={localStorage.getItem('searchKeyword')}
                 onCheckbox={handleChangeCheckbox}
                 checked={checked}
                 checkedSaveMovies={checkedSaveMovies}
                 savedMovies={savedMovies}
                 onSave={handleSaveMovie}
                 onDelete={handleDeleteMovie}
-                localCheckbox={localCheckbox}
                 allSavedMovies={allSavedMovies}
               ></Movies>
             </ProtectedRoute>
@@ -309,7 +309,7 @@ function App() {
                 isLoading={isLoading}
                 isFailed={isFailed}
                 isNotFound={isNotFound}
-                searchKeyword={searchKeyword}
+                searchKeyword={localStorage.getItem('searchKeyword')}
                 onCheckbox={handleChangeCheckbox}
                 checked={checked}
                 checkedSaveMovies={checkedSaveMovies}

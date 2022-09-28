@@ -19,7 +19,6 @@ function Movies({
   onCheckbox,
   checked,
   checkedSaveMovies,
-  localCheckbox,
   allSavedMovies,
 }) {
 
@@ -38,7 +37,6 @@ function Movies({
           onCheckbox={onCheckbox}
           checked={checked}
           checkedSaveMovies={checkedSaveMovies}
-          localCheckbox={localCheckbox}
         />
 
         {isLoading ? (
