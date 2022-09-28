@@ -28,7 +28,12 @@ function Login({ onLogin, isLoginMessage, isErrorLoginBtn }) {
             <Link to='/' className='login__logo'></Link>
             <h2 className='login__title'>Рады видеть!</h2>
           </header>
-          <form action='#' className='login__form' onSubmit={handleSubmit}>
+          <form
+            action='#'
+            className='login__form'
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <fieldset className='login__content'>
               <label className='login__form-field'>
                 <span className='login__label'>E-mail</span>

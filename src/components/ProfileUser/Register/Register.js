@@ -29,7 +29,12 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
             <Link to='/' className='register__logo'></Link>
             <h2 className='register__title'>Добро пожаловать!</h2>
           </header>
-          <form action='#' className='register__form' onSubmit={handleSubmit}>
+          <form
+            action='#'
+            className='register__form'
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <fieldset className='register__content'>
               <label className='register__form-field'>
                 <span className='register__label'>Имя</span>

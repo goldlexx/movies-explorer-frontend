@@ -40,7 +40,7 @@ function Profile({ onUpdateUser, onSignOut }) {
       <main className='profile'>
         <div className='profile__container'>
           <h1 className='profile__title'> Привет, {currentUser.name}</h1>
-          <form className='profile__form' onSubmit={handleSubmit}>
+          <form className='profile__form' onSubmit={handleSubmit} noValidate>
             <label className='profile__input-container'>
               <span className='profile__input-label'>Имя</span>
               <input
@@ -94,7 +94,9 @@ function Profile({ onUpdateUser, onSignOut }) {
                 </button>
               </li>
               <li className='profile__item'>
-                <button className='profile__logout' onClick={onSignOut}>Выйти из аккаунта</button>
+                <button className='profile__logout' onClick={onSignOut}>
+                  Выйти из аккаунта
+                </button>
               </li>
             </ul>
           )}
