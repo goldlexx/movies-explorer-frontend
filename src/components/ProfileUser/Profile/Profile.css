@@ -151,6 +151,16 @@
   visibility: visible;
 }
 
+.profile__button-msg {
+  color: #3ddc84;
+  border: 1px solid #000;
+  text-align: center;
+  font-size: 14px;
+}
+
+.profile__button-msg_hidden {
+  display: none;
+}
 @media screen and (max-width: 768px) {
   .profile__container {
     padding: 156px 0 0;

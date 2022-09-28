@@ -34,7 +34,7 @@ function App() {
   const [isFailed, setIsFailed] = useState(false);
   const [checked, setChecked] = useState(true);
   const [checkedSaveMovies, setCheckedSaveMovies] = useState(true);
-
+  const [isMessageProfile, setIsMessageProfile] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState(
     localStorage.getItem('searchKeyword') || ''
@@ -50,16 +50,15 @@ function App() {
     JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
   );
 
-
   const [allSavedMovies, setAllSavedMovies] = useState([]);
 
   const [allMovies, setAllMovies] = useState(
     JSON.parse(localStorage.getItem('allMovies')) || []
   );
 
-    useEffect(() => {
-      tokenCheck();
-    }, []);
+  useEffect(() => {
+    tokenCheck();
+  }, []);
 
   useEffect(() => {
     moviesApi
@@ -95,12 +94,10 @@ function App() {
       if (filteredMovies) {
         setMovies(filteredMovies);
         setChecked(localCheckbox);
-        setCheckedSaveMovies(localCheckboxSaveMovies)
+        setCheckedSaveMovies(localCheckboxSaveMovies);
       }
-
     }
   }, [loggedIn, filteredMovies]);
-
 
   const tokenCheck = () => {
     const jwt = localStorage.getItem('jwt');
@@ -150,12 +147,11 @@ function App() {
   };
 
   const handleChangeCheckbox = (evt) => {
-    if (location.pathname === "/movies") {
+    if (location.pathname === '/movies') {
       setChecked(!checked);
-    } else if (location.pathname === "/saved-movies") {
+    } else if (location.pathname === '/saved-movies') {
       setCheckedSaveMovies(!checkedSaveMovies);
     }
-
   };
 
   const searchMovies = (movies, name) => {
@@ -246,11 +242,14 @@ function App() {
     apiAuth
       .updateUserInfo(name, email)
       .then((data) => {
-        console.log(data);
+        setIsMessageProfile(true);
         setCurrentUser(data);
       })
       .catch((err) => {
         console.error(err);
+      })
+      .finally(() => {
+        setTimeout(() =>  setIsMessageProfile(false), 1000);
       });
   };
 
@@ -325,7 +324,11 @@ function App() {
           path='/profile'
           element={
             <ProtectedRoute loggedIn={loggedIn}>
-              <Profile onUpdateUser={onUpdateUser} onSignOut={onSignOut} />
+              <Profile
+                onUpdateUser={onUpdateUser}
+                onSignOut={onSignOut}
+                isMessageProfile={isMessageProfile}
+              />
             </ProtectedRoute>
           }
         />
