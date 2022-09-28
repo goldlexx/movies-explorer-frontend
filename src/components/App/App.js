@@ -72,7 +72,6 @@ function App() {
         .getSavedMovies()
         .then((res) => {
           setSavedMovies(res);
-          localStorage.setItem('savedMovies', JSON.stringify(res));
         })
         .catch((err) => {
           console.log(err);
@@ -103,7 +102,6 @@ function App() {
       apiAuth
         .checkToken(jwt)
         .then((res) => {
-          console.log(res);
           if (res) {
             setLoggedIn(true);
           }
@@ -119,10 +117,6 @@ function App() {
       .addMovie(movie)
       .then((data) => {
         setSavedMovies([data, ...savedMovies]);
-        localStorage.setItem(
-          'savedMovies',
-          JSON.stringify([data, ...savedMovies])
-        );
       })
       .catch((err) => {
         console.log(err);
