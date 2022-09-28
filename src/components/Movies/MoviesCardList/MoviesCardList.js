@@ -48,10 +48,10 @@ function MoviesCardList({
         setMoviesToLoad(2);
       } else if (windowWidth <= 990 && windowWidth > 480) {
         setDisplayedMovies(8);
-        setMoviesToLoad(3);
+        setMoviesToLoad(2);
       } else if (windowWidth <= 1280 && windowWidth > 990) {
-        setDisplayedMovies(16);
-        setMoviesToLoad(4);
+        setDisplayedMovies(12);
+        setMoviesToLoad(3);
       } else if (windowWidth > 1280) {
         setDisplayedMovies(16);
         setMoviesToLoad(4);

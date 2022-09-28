@@ -49,9 +49,9 @@ function App() {
 
   const [allSavedMovies, setAllSavedMovies] = useState([]);
 
-  // const [allMovies, setAllMovies] = useState(
-  //   JSON.parse(localStorage.getItem('allMovies')) || []
-  // );
+  const [allMovies, setAllMovies] = useState(
+    JSON.parse(localStorage.getItem('allMovies')) || []
+  );
 
   useEffect(() => {
     tokenCheck();
@@ -62,7 +62,6 @@ function App() {
       .getAllMovies()
       .then((movies) => {
         localStorage.setItem('allMovies', JSON.stringify(movies));
-        console.log(movies);
       })
       .catch((err) => {
         setIsFailed(true);
@@ -160,7 +159,8 @@ function App() {
 
   const handleSearchMovies = (name) => {
     setIsLoading(true);
-    const searchArr = searchMovies(JSON.parse(localStorage.getItem('allMovies')), name);
+    const searchArr = searchMovies(allMovies, name);
+    console.log(searchArr);
     setMovies(searchArr);
     setIsNotFound(!movies.length && !isFailed);
     localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
