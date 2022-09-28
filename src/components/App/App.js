@@ -25,11 +25,8 @@ function App() {
   const [isRegisterMessage, setRegisterMessage] = useState(false);
   const [isLoginMessage, setLoginMessage] = useState(false);
   const [isErrorLoginBtn, setIsErrorLoginBtn] = useState(false);
-  // const [allMovies, setAllMovies] = useState([]);
   const [movies, setMovies] = useState([]);
-
   const [savedMovies, setSavedMovies] = useState([]);
-
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
   const [checked, setChecked] = useState(true);
@@ -52,9 +49,9 @@ function App() {
 
   const [allSavedMovies, setAllSavedMovies] = useState([]);
 
-  const [allMovies, setAllMovies] = useState(
-    JSON.parse(localStorage.getItem('allMovies')) || []
-  );
+  // const [allMovies, setAllMovies] = useState(
+  //   JSON.parse(localStorage.getItem('allMovies')) || []
+  // );
 
   useEffect(() => {
     tokenCheck();
@@ -65,6 +62,7 @@ function App() {
       .getAllMovies()
       .then((movies) => {
         localStorage.setItem('allMovies', JSON.stringify(movies));
+        console.log(movies);
       })
       .catch((err) => {
         setIsFailed(true);
@@ -162,7 +160,7 @@ function App() {
 
   const handleSearchMovies = (name) => {
     setIsLoading(true);
-    const searchArr = searchMovies(allMovies, name);
+    const searchArr = searchMovies(JSON.parse(localStorage.getItem('allMovies')), name);
     setMovies(searchArr);
     setIsNotFound(!movies.length && !isFailed);
     localStorage.setItem('filteredMovies', JSON.stringify(searchArr));

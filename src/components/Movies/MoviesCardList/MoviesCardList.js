@@ -34,6 +34,7 @@ function MoviesCardList({
 
   let moviesFilterArr = !checked ? searchShortMovies(movies) : movies;
 
+
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowWidth(window.innerWidth);
@@ -59,7 +60,7 @@ function MoviesCardList({
   }, [windowWidth, location]);
 
   let classTextNotFound =
-    isNotFound || moviesFilterArr.length === 0
+    isNotFound && moviesFilterArr.length === 0
       ? 'movies-list__not-found_visible'
       : 'movies-list__not-found';
 
