@@ -33,6 +33,7 @@ function App() {
   const [checkedSaveMovies, setCheckedSaveMovies] = useState(true);
   const [isMessageProfile, setIsMessageProfile] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
+  const [allSavedMovies, setAllSavedMovies] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState(
     localStorage.getItem('searchKeyword') || ''
   );
@@ -47,11 +48,11 @@ function App() {
     JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
   );
 
-  const [allSavedMovies, setAllSavedMovies] = useState([]);
 
-  const [allMovies, setAllMovies] = useState(
-    JSON.parse(localStorage.getItem('allMovies')) || []
-  );
+
+  // const [allMovies, setAllMovies] = useState(
+  //   JSON.parse(localStorage.getItem('allMovies')) || []
+  // );
 
   useEffect(() => {
     tokenCheck();
@@ -159,7 +160,7 @@ function App() {
 
   const handleSearchMovies = (name) => {
     setIsLoading(true);
-    const searchArr = searchMovies(allMovies, name);
+    const searchArr = searchMovies(JSON.parse(localStorage.getItem('allMovies')), name);
     console.log(searchArr);
     setMovies(searchArr);
     setIsNotFound(!movies.length && !isFailed);
@@ -176,6 +177,7 @@ function App() {
     mainApi
       .getSavedMovies()
       .then((movies) => {
+        setAllSavedMovies(movies);
         localStorage.setItem('checkboxSaveMovies', checkedSaveMovies);
         const userSavedMovies = movies.filter((movie) => {
           return movie.owner === currentUser._id;

@@ -10,14 +10,16 @@ function MoviesCard({
   onSave,
   onDelete,
   movie,
+  allSavedMovies
 }) {
 
   const location = useLocation();
   let hours = Math.floor(duration / 60);
   let minutes = Math.floor(duration - hours * 60);
   const isSaved = savedMovies.some((m) => m.movieId === movie.id);
+  const isAllSaved = allSavedMovies.some((m) => m.movieId === movie.id);
 
-  let buttonClassName = isSaved
+  let buttonClassName = isSaved || isAllSaved
     ? 'movies-card__button movies-card__button_save'
     : 'movies-card__button';
 
