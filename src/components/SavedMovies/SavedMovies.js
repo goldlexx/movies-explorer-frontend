@@ -15,6 +15,7 @@ function SavedMovies({
   searchKeyword,
   onCheckbox,
   checked,
+  checkedSaveMovies,
   savedMovies,
   onSave,
   onDelete,
@@ -34,12 +35,14 @@ function SavedMovies({
           searchKeyword={searchKeyword}
           onCheckbox={onCheckbox}
           checked={checked}
+          checkedSaveMovies={checkedSaveMovies}
         ></SearchForm>
         {isLoading ? (
           <Preloader />
         ) : (
           <MoviesCardList
             checked={checked}
+            checkedSaveMovies={checkedSaveMovies}
             movies={movies}
             isNotFound={isNotFound}
             isFailed={isFailed}

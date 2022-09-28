@@ -6,7 +6,7 @@ import Register from '../ProfileUser/Register/Register';
 import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute';
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 
 import moviesApi from '../../utils/MoviesApi';
@@ -17,6 +17,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './App.css';
 
 function App() {
+  const location = useLocation();
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
@@ -31,7 +32,9 @@ function App() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
-  const [checked, setChecked] = useState(false);
+  const [checked, setChecked] = useState(true);
+  const [checkedSaveMovies, setCheckedSaveMovies] = useState(true);
+
   const [isNotFound, setIsNotFound] = useState(false);
   const [searchKeyword, setSearchKeyword] = useState(
     localStorage.getItem('searchKeyword') || ''
@@ -41,6 +44,10 @@ function App() {
   );
   const [localCheckbox, setLocalCheckbox] = useState(
     JSON.parse(localStorage.getItem('checkbox')) || checked
+  );
+
+  const [localCheckboxSaveMovies, setLocalCheckboxSaveMovies] = useState(
+    JSON.parse(localStorage.getItem('checkboxSaveMovies')) || checkedSaveMovies
   );
 
     useEffect(() => {
@@ -82,7 +89,9 @@ function App() {
       if (filteredMovies) {
         setMovies(filteredMovies);
         setChecked(localCheckbox);
+        setCheckedSaveMovies(localCheckboxSaveMovies)
       }
+
     }
   }, [loggedIn, filteredMovies]);
 
@@ -140,7 +149,12 @@ function App() {
   };
 
   const handleChangeCheckbox = (evt) => {
-    setChecked(!checked);
+    if (location.pathname === "/movies") {
+      setChecked(!checked);
+    } else if (location.pathname === "/saved-movies") {
+      setCheckedSaveMovies(!checkedSaveMovies);
+    }
+
   };
 
   const searchMovies = (movies, name) => {
@@ -167,6 +181,7 @@ function App() {
     mainApi
       .getSavedMovies()
       .then((movies) => {
+        localStorage.setItem('checkboxSaveMovies', checkedSaveMovies);
         const userSavedMovies = movies.filter((movie) => {
           return movie.owner === currentUser._id;
         });
@@ -252,7 +267,8 @@ function App() {
     setIsFailed(false);
     setMovies([]);
     setSavedMovies([]);
-    setChecked(false);
+    setChecked(true);
+    setCheckedSaveMovies(true);
     setIsNotFound(false);
   };
 
@@ -273,6 +289,7 @@ function App() {
                 searchKeyword={searchKeyword}
                 onCheckbox={handleChangeCheckbox}
                 checked={checked}
+                checkedSaveMovies={checkedSaveMovies}
                 savedMovies={savedMovies}
                 onSave={handleSaveMovie}
                 onDelete={handleDeleteMovie}
@@ -295,6 +312,7 @@ function App() {
                 searchKeyword={searchKeyword}
                 onCheckbox={handleChangeCheckbox}
                 checked={checked}
+                checkedSaveMovies={checkedSaveMovies}
                 savedMovies={savedMovies}
                 onSave={handleSaveMovie}
                 onDelete={handleDeleteMovie}

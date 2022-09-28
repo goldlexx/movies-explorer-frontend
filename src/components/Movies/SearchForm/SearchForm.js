@@ -8,6 +8,7 @@ function SearchForm({
   searchKeyword,
   onCheckbox,
   checked,
+  checkedSaveMovies,
   localCheckbox,
 }) {
   const [errorText, setErrorText] = useState('');
@@ -62,6 +63,7 @@ function SearchForm({
         <Checkbox
           onCheckbox={onCheckbox}
           checked={checked}
+          checkedSaveMovies={checkedSaveMovies}
           localCheckbox={localCheckbox}
         ></Checkbox>
       </div>

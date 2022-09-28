@@ -18,9 +18,11 @@ function Movies({
   onDelete,
   onCheckbox,
   checked,
+  checkedSaveMovies,
   localCheckbox,
   allSavedMovies,
 }) {
+
   return (
     <>
       <Header
@@ -35,6 +37,7 @@ function Movies({
           searchKeyword={searchKeyword}
           onCheckbox={onCheckbox}
           checked={checked}
+          checkedSaveMovies={checkedSaveMovies}
           localCheckbox={localCheckbox}
         />
 
@@ -51,6 +54,7 @@ function Movies({
             onDelete={onDelete}
             onCheckbox={onCheckbox}
             checked={checked}
+            checkedSaveMovies={checkedSaveMovies}
             allSavedMovies={allSavedMovies}
           />
         )}

@@ -11,6 +11,7 @@ function MoviesCardList({
   onSave,
   onDelete,
   checked,
+  checkedSaveMovies,
   allSavedMovies,
 }) {
   const [moviesToLoad, setMoviesToLoad] = useState(0);
@@ -27,7 +28,7 @@ function MoviesCardList({
     return searchShortMoviesArr.filter((item) => item.duration <= 40);
   };
 
-  let saveMoviesFilterArr = !checked
+  let saveMoviesFilterArr = !checkedSaveMovies
     ? searchShortMovies(savedMovies)
     : savedMovies;
 
