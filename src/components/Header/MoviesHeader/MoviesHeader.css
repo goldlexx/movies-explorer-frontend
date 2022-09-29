@@ -17,11 +17,14 @@
 }
 
 .navigate__movies {
+  position: relative;
   font-weight: 500;
   font-size: 13px;
   line-height: 18px;
+	line-height: 2;
   text-decoration: none;
   color: #fff;
+	cursor: pointer;
 }
 
 .navigate__save-movies {
@@ -42,6 +45,27 @@
   text-decoration: none;
   color: #fff;
   background: #313131;
+  transition: opacity 0.3s linear;
+}
+
+.navigate__movies::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	display: block;
+	width: 0;
+	height: 2px;
+	background-color: #fff;
+	transition: width 0.3s ease-out;
+}
+
+.navigate__movies:hover::after,
+.navigate__movies:focus::after {
+	width: 100%; /* устанавливаем значение 100% чтобы ссылка подчёркивалась полностью */
+}
+
+.navigate__account:hover {
+  opacity: 0.8;
 }
 
 .navigate__button-open {
@@ -54,6 +78,10 @@
   color: inherit;
   background-image: url(../../../images/burger.svg);
   background-color: transparent;
+}
+
+.active {
+  color: #3ddc84;
 }
 
 @media screen and (max-width: 768px) {

@@ -15,6 +15,11 @@
   width: 40px;
   height: 38px;
   background: url(../../../images/logo.svg) no-repeat;
+  transition: opacity 0.3s linear;
+}
+
+.login__logo:hover {
+  opacity: 0.8;
 }
 
 .login__title {
@@ -40,7 +45,7 @@
 }
 
 .login__input {
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   border: none;
   border-radius: 8px;
   padding: 0 15px;
@@ -68,8 +73,38 @@
   text-align: center;
   color: #fff;
   background: #4285f4;
+  transition: opacity 0.3s linear;
   cursor: pointer;
 }
+
+.login__submit-button:hover {
+opacity: 0.8;
+}
+
+.login__submit-button:disabled {
+  color: #c2c2c2;
+  background: #f8f8f8;
+  pointer-events: none;
+}
+
+.login__error {
+  display: block;
+  margin-bottom: 10px;
+  min-height: 24px;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #ee3465;
+  opacity: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+
+.login__error_visible {
+  opacity: 1;
+  visibility: visible;
+}
+
 
 .login__submit-button:active {
   transform: translateY(2px);

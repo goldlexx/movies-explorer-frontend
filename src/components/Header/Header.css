@@ -1,5 +1,6 @@
 .header__theme_black {
   background: #202020;
+  padding-bottom: 80px;
 }
 
 .header__theme_blue {
@@ -28,6 +29,11 @@
   width: 40px;
   height: 38px;
   background: url(../../images/logo.svg) no-repeat;
+  transition: opacity 0.3s linear;
+}
+
+.header__logo:hover {
+  opacity: 0.8;
 }
 
 @media screen and (max-width: 768px) {
