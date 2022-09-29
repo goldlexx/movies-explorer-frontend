@@ -42,7 +42,7 @@ API реализован с валидацией запросов, логиро�
 ### Инструкция по разрёртыванию проекта:
 ```bash
 # клонирование репозитория
-$ git clone https://github.com/goldlexx/react-mesto-api-full.git
+$ git clone https://github.com/goldlexx/movies-explorer-frontend.git
 
 # установка зависимостей
 $ npm install
@@ -50,8 +50,6 @@ $ npm install
 # запуск develop-сборки фронтенда
 $ npm run start
 
-# Запуск develop-сборки бэкенда
-$ npm run dev
 ```
 ---
 
