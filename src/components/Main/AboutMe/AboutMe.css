@@ -61,7 +61,10 @@
 
 .student__photo {
   display: block;
+  object-fit: contain;
   border-radius: 10px;
+  max-width: 270px;
+  max-height: 327px;
 }
 
 @media screen and (max-width: 1050px) {
