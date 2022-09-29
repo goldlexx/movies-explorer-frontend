@@ -120,7 +120,6 @@ function App() {
   const handleChangeCheckbox = (evt) => {
     if (location.pathname === '/movies') {
       setChecked(!checked);
-      localStorage.setItem('checkbox', !checked);
     } else if (location.pathname === '/saved-movies') {
       setCheckedSaveMovies(!checkedSaveMovies);
     }

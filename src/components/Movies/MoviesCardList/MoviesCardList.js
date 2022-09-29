@@ -37,10 +37,6 @@ function MoviesCardList({
   useEffect(() => {
     const handleWindowResize = () => {
       setWindowWidth(window.innerWidth);
-      window.addEventListener('resize', handleWindowResize);
-      return () => {
-        window.removeEventListener('resize', handleWindowResize);
-      };
     };
 
     if (location.pathname === '/movies') {
@@ -58,6 +54,11 @@ function MoviesCardList({
         setMoviesToLoad(4);
       }
     }
+
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
   }, [windowWidth, location]);
 
   let classTextNotFound =
