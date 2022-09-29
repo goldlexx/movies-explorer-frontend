@@ -6,7 +6,6 @@ function Checkbox({ onCheckbox, checked, checkedSaveMovies }) {
   const handleCheckbox = (evt) => {
     onCheckbox(evt.target.checked);
   };
-
   return (
     <div className='checkbox checkbox__container'>
       <p className='checkbox__title'>Короткометражки</p>

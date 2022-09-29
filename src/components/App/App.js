@@ -57,7 +57,6 @@ function App() {
         .catch((err) => {
           console.error(`Данные пользователя не получены: ${err}`);
         });
-
       if (JSON.parse(localStorage.getItem('filteredMovies'))) {
         setMovies(JSON.parse(localStorage.getItem('filteredMovies')));
         setChecked(JSON.parse(localStorage.getItem('checkbox')));
@@ -120,8 +119,10 @@ function App() {
   const handleChangeCheckbox = (evt) => {
     if (location.pathname === '/movies') {
       setChecked(!checked);
+      localStorage.setItem('checkbox', !checked);
     } else if (location.pathname === '/saved-movies') {
       setCheckedSaveMovies(!checkedSaveMovies);
+      localStorage.setItem('checkboxSaveMovies', !checkedSaveMovies);
     }
   };
 
@@ -165,7 +166,7 @@ function App() {
         name
       );
       setMovies(searchArr);
-      setIsNotFound(!movies.length && !isFailed);
+      setIsNotFound(!movies.length || !isFailed);
       localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
       localStorage.setItem('searchKeyword', name);
       localStorage.setItem('checkbox', checked);
@@ -193,7 +194,7 @@ function App() {
     const searchArr = searchMovies(allSavedMovies, name);
 
     setSavedMovies(searchArr);
-    setIsNotFound(!searchArr.length && !isFailed);
+    setIsNotFound(!searchArr.length || !isFailed);
     setTimeout(() => setIsLoading(false), 1000);
   };
 

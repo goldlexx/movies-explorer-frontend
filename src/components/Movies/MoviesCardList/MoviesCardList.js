@@ -79,20 +79,22 @@ function MoviesCardList({
     };
   }, [windowWidth, location]);
 
-  let classTextNotFound =
-    isNotFound && moviesFilterArr.length === 0
-      ? 'movies-list__not-found_visible'
-      : 'movies-list__not-found';
-
   let classTextError =
     isFailed && !isNotFound
       ? 'movies-list__error_visible'
       : 'movies-list__error';
 
   let buttonStatus =
-    !(movies.length > 4) || displayedMovies >= movies.length
+    !(movies.length > 4) ||
+    displayedMovies >= movies.length ||
+    displayedMovies >= moviesFilterArr.length
       ? 'movies-list__button_hidden'
       : 'movies-list__button';
+
+  let classTextNotFound =
+    isNotFound && moviesFilterArr.length === 0
+      ? 'movies-list__not-found_visible'
+      : 'movies-list__not-found';
 
   let moviesBlock = location.pathname === '/movies';
 
