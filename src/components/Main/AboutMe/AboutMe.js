@@ -10,7 +10,7 @@ function AboutMe() {
           <div className='student__info'>
             <h3 className='student__name'>Руслан</h3>
             <p className='student__specialization'>
-              Фронтенд-разработчик, 32 лет
+              Фронтенд-разработчик, 32 года
             </p>
             <p className='student__description'>
               Я живу в Москве, закончил факультет социальной работы в МосГУ.
