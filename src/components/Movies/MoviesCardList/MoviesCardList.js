@@ -2,6 +2,18 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import {
+  BREAKPOINT_1280,
+  BREAKPOINT_990,
+  BREAKPOINT_480,
+  VISIBLE_MOVIES_5,
+  VISIBLE_MOVIES_8,
+  VISIBLE_MOVIES_12,
+  VISIBLE_MOVIES_16,
+  MOVIES_TO_LOAD_2,
+  MOVIES_TO_LOAD_3,
+  MOVIES_TO_LOAD_4,
+} from '../../../utils/constants';
 
 function MoviesCardList({
   movies,
@@ -40,18 +52,24 @@ function MoviesCardList({
     };
 
     if (location.pathname === '/movies') {
-      if (windowWidth <= 480) {
-        setDisplayedMovies(5);
-        setMoviesToLoad(2);
-      } else if (windowWidth <= 990 && windowWidth > 480) {
-        setDisplayedMovies(8);
-        setMoviesToLoad(2);
-      } else if (windowWidth <= 1280 && windowWidth > 990) {
-        setDisplayedMovies(12);
-        setMoviesToLoad(3);
-      } else if (windowWidth > 1280) {
-        setDisplayedMovies(16);
-        setMoviesToLoad(4);
+      if (windowWidth <= BREAKPOINT_480) {
+        setDisplayedMovies(VISIBLE_MOVIES_5);
+        setMoviesToLoad(MOVIES_TO_LOAD_2);
+      } else if (
+        windowWidth <= BREAKPOINT_990 &&
+        windowWidth > BREAKPOINT_480
+      ) {
+        setDisplayedMovies(VISIBLE_MOVIES_8);
+        setMoviesToLoad(MOVIES_TO_LOAD_2);
+      } else if (
+        windowWidth <= BREAKPOINT_1280 &&
+        windowWidth > BREAKPOINT_990
+      ) {
+        setDisplayedMovies(VISIBLE_MOVIES_12);
+        setMoviesToLoad(MOVIES_TO_LOAD_3);
+      } else if (windowWidth > BREAKPOINT_1280) {
+        setDisplayedMovies(VISIBLE_MOVIES_16);
+        setMoviesToLoad(MOVIES_TO_LOAD_4);
       }
     }
 
