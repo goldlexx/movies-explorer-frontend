@@ -19,7 +19,7 @@ function SearchForm({
     if (searchKeyword && location.pathname === '/movies') {
       setKeyword(searchKeyword);
     }
-  }, []);
+  }, [location.pathname, searchKeyword]);
 
   const handleChange = (evt) => {
     setKeyword(evt.target.value);
@@ -29,10 +29,12 @@ function SearchForm({
   const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    setIsFormValid(evt.target.closest('form').checkValidity());
-    if (!isFormValid) {
+    const isValid = evt.currentTarget.checkValidity();
+    setIsFormValid(isValid);
+    if (!isValid) {
       return setErrorText('Нужно ввести ключевое слово');
     }
+    setErrorText('');
     onSubmit(keyword);
   };
 
@@ -40,7 +42,6 @@ function SearchForm({
     <section className='search'>
       <div className='search__container'>
         <form
-          action='#'
           noValidate
           className='search__form'
           onSubmit={handleSubmit}
@@ -49,13 +50,14 @@ function SearchForm({
             type='text'
             className='search__input'
             placeholder='Фильм'
+            aria-label='Search movies'
             required
             onChange={handleChange}
             value={keyword}
             minLength='1'
             maxLength='30'
           />
-          <button type='submit' className='search__button'></button>
+          <button type='submit' className='search__button' aria-label='Search'></button>
           <span className='search__error'>{!isFormValid && errorText}</span>
         </form>
 

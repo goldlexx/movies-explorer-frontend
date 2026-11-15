@@ -1,67 +1,46 @@
-# Дипломный проект Movies-explorer (Фронтенд). Создана в рамках учебы в [Яндекс.Практикум](https://praktikum.yandex.ru/) на курсе ["Веб-разработчик"](https://praktikum.yandex.ru/web/).
+# Movies Explorer — Frontend
 
-## Описание:
+The React client for Movies Explorer. Users can search a movie catalogue, register and sign in, and save movies to their account.
 
-Репозиторий для приложения проекта `Movies`, включающий фронтенд часть приложения со следующими возможностями: авторизации и регистрации пользователей, поиском фильмов и их сохранением.
+**Related project:** [Movies Explorer API](https://github.com/goldlexx/movies-explorer-api)
 
-| **Публичный домен** | [Movies](https://movies-explorer-project.nomorepartiesxyz.ru/) |
-| ----------------- | -------------------------------------------------------------------- |
+## Screenshot
 
-API реализован с валидацией запросов, логированием запросов и ошибок, централизованной обработкой ошибок и доступен по [этой](https://api.movies.explorer.nomorepartiesxyz.ru/) ссылке.
+![Movies Explorer landing page](screenshots/local-home.jpg)
 
-Публичный IP-адрес сервера: 84.252.128.255
+The screenshot was captured from the local frontend. The interface text is in Russian.
 
-## Примененные знания
-* Верстка
-  - Соверменная верстка с использованием Flexbox и Grid Layout
-  - Семантическая верстка
-  - Адаптивная верстка сайта для разных экранов (от 320 до 1280+)
-  - Верстка форм (текстовые поля и кнопки)
-  - Методология БЭМ
+## Features
 
-* React
-  - использование Create React App
-  - хуки `useState` и `useEffect`
-  - поднятие стейта
-  - глобальный стейт через React Context
-  - управляемые компоненты в элементах формы
-  - использование реф для прямого доступа к DOM-элементам
+- Registration, sign-in, and protected routes
+- Movie search and short-film filtering
+- Save and remove movies from a user's list
+- Profile editing and responsive layouts
 
-* React Router
-  - реализован функционал  регистрации и авторизации
-  - защищенные маршруты
-  - авторизация через JWT
-  - работа с Local Starage
+## Technologies
 
-* Бэкенд
-  - Node.js
-  - express.js
-  - MongoDB
-  - Mongoose
+- React 18
+- React Router 6
+- Create React App (`react-scripts` 5)
+- JavaScript and CSS
 
-### Инструкция по разрёртыванию проекта:
+## Run locally
+
 ```bash
-# клонирование репозитория
-$ git clone https://github.com/goldlexx/movies-explorer-frontend.git
-
-# установка зависимостей
-$ npm install
-
-# запуск develop-сборки фронтенда
-$ npm run start
-
+npm ci
+npm start
 ```
----
 
-![Illustration for the project](https://moviestart.ru/wp-content/uploads/2020/12/image-21-02-20-08-02.jpg)
+The repository also defines `npm run build` to create a production build.
 
+## API configuration
 
+The movie catalogue service and the saved-movies API base URL are currently defined in the frontend source (`src/utils/MoviesApi.js` and `src/utils/MainApi.js`). They are not read from environment variables. The saved-movies API points to a legacy deployment that could not be verified, so local development may require updating the API URL in your local copy.
 
+## Demo status
 
+No live demo link is listed because the legacy frontend and API deployment could not be confirmed as working during this review.
 
+## Verification
 
-
-
-
-
-
+The production build completed. It reported existing React Hook dependency and anchor accessibility warnings.

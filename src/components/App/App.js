@@ -7,7 +7,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import moviesApi from '../../utils/MoviesApi';
 import mainApi from '../../utils/MainApi';
@@ -35,9 +35,45 @@ function App() {
   const [isNotFound, setIsNotFound] = useState(false);
   const [allSavedMovies, setAllSavedMovies] = useState([]);
 
+  const onSignOut = useCallback(() => {
+    localStorage.clear();
+    navigate('/');
+    setLoggedIn(false);
+    setCurrentUser({});
+    setIsErrorRegisterBtn(false);
+    setRegisterMessage(false);
+    setLoginMessage(false);
+    setIsErrorLoginBtn(false);
+    setIsLoading(false);
+    setIsFailed(false);
+    setMovies([]);
+    setSavedMovies([]);
+    setChecked(true);
+    setCheckedSaveMovies(true);
+    setIsNotFound(false);
+  }, [navigate]);
+
+  const tokenCheck = useCallback(() => {
+    const jwt = localStorage.getItem('jwt');
+    if (!jwt) return;
+
+    apiAuth
+      .checkToken(jwt)
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          navigate(location.pathname);
+        }
+      })
+      .catch((err) => {
+        onSignOut();
+        console.error(err);
+      });
+  }, [location.pathname, navigate, onSignOut]);
+
   useEffect(() => {
     tokenCheck();
-  }, []);
+  }, [tokenCheck]);
 
   useEffect(() => {
     if (loggedIn) {
@@ -66,25 +102,6 @@ function App() {
       }
     }
   }, [loggedIn]);
-
-  const tokenCheck = () => {
-    const jwt = localStorage.getItem('jwt');
-
-    if (jwt) {
-      apiAuth
-        .checkToken(jwt)
-        .then((res) => {
-          if (res) {
-            setLoggedIn(true);
-            navigate(location.pathname);
-          }
-        })
-        .catch((err) => {
-          onSignOut();
-          console.error(err);
-        });
-    }
-  };
 
   const handleSaveMovie = (movie) => {
     mainApi
@@ -253,24 +270,6 @@ function App() {
       .finally(() => {
         setTimeout(() => setIsMessageProfile(false), 1000);
       });
-  };
-
-  const onSignOut = () => {
-    localStorage.clear();
-    navigate('/');
-    setLoggedIn(false);
-    setCurrentUser({});
-    setIsErrorRegisterBtn(false);
-    setRegisterMessage(false);
-    setLoginMessage(false);
-    setIsErrorLoginBtn(false);
-    setIsLoading(false);
-    setIsFailed(false);
-    setMovies([]);
-    setSavedMovies([]);
-    setChecked(true);
-    setCheckedSaveMovies(true);
-    setIsNotFound(false);
   };
 
   return (

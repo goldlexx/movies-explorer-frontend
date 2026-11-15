@@ -15,12 +15,7 @@ function Portfolio() {
             >
               Статичный сайт
             </a>
-            <a
-              className='portfolio__arrow'
-              href='https://goldlexx.github.io/how-to-learn/'
-              target='_blank'
-              rel='noreferrer'
-            />
+            <span className='portfolio__arrow' aria-hidden='true' />
           </li>
           <li className='portfolio__item'>
             <a
@@ -31,12 +26,7 @@ function Portfolio() {
             >
               Адаптивный сайт
             </a>
-            <a
-              className='portfolio__arrow'
-              href='https://goldlexx.github.io/russian-travel/'
-              target='_blank'
-              rel='noreferrer'
-            />
+            <span className='portfolio__arrow' aria-hidden='true' />
           </li>
           <li className='portfolio__item'>
             <a
@@ -47,12 +37,7 @@ function Portfolio() {
             >
               Одностраничное приложение
             </a>
-            <a
-              className='portfolio__arrow'
-              href='https://место.site/'
-              target='_blank'
-              rel='noreferrer'
-            />
+            <span className='portfolio__arrow' aria-hidden='true' />
           </li>
         </ul>
       </div>
