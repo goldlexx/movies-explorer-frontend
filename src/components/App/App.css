@@ -13,3 +13,13 @@
   color: #fff;
   user-select: none;
 }
+.service-preview {
+  margin: 8px auto;
+  max-width: 1140px;
+  padding: 10px 14px;
+  border-left: 3px solid #3456f3;
+  background: #f3f5ff;
+  color: #1a1b22;
+  font-size: 14px;
+  line-height: 1.5;
+}

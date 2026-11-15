@@ -274,6 +274,9 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+      <p className='service-preview' role='status'>
+        Preview: movie search uses the public catalog API. Sign-in and saved movies require the separate Movies API; failed requests are shown without simulated success.
+      </p>
       <Routes>
         <Route path='/' element={<Main loggedIn={loggedIn} />} />
         <Route
