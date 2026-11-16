@@ -43,7 +43,7 @@ class MainApi {
         thumbnail: this._getAssetUrl(
           movie.image?.formats?.thumbnail?.url || movie.image?.url
         ),
-        movieId: String(movie.id),
+        movieId: Number(movie.id),
         nameRU: movie.nameRU,
         nameEN: movie.nameEN,
       }),
