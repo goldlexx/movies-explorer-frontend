@@ -20,6 +20,7 @@ function SavedMovies({
   onSave,
   onDelete,
   allSavedMovies,
+  actionMessage,
 }) {
   return (
     <>
@@ -50,6 +51,7 @@ function SavedMovies({
             onSave={onSave}
             onDelete={onDelete}
             allSavedMovies={allSavedMovies}
+            actionMessage={actionMessage}
           ></MoviesCardList>
         )}
       </main>

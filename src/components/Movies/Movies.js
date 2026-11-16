@@ -21,6 +21,7 @@ function Movies({
   checkedSaveMovies,
   allSavedMovies,
   loggedIn,
+  actionMessage,
 }) {
 
   return (
@@ -59,6 +60,7 @@ function Movies({
             checkedSaveMovies={checkedSaveMovies}
             allSavedMovies={allSavedMovies}
             loggedIn={loggedIn}
+            actionMessage={actionMessage}
           />
         )}
       </main>

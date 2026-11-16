@@ -13,7 +13,7 @@ The interface and screenshot use Russian-language content.
 - Search the movie catalogue and filter short films
 - Register, sign in, and edit a profile
 - Save movies to a personal list and remove them later
-- Browse the catalogue with local demo data when the catalogue service is unavailable
+- Browse eight bundled local demo movies immediately; no external catalogue request is required
 
 ## Tech Stack
 
@@ -35,13 +35,12 @@ Create a production build with `npm run build`.
 
 ## API Configuration
 
-The frontend provides defaults for the saved-movies API, catalogue API, and movie image host. Override them at build time with:
+The frontend provides defaults for the saved-movies API and movie image host. Override them at build time with:
 
 - `REACT_APP_MOVIES_API_BASE_URL`
-- `REACT_APP_MOVIES_CATALOG_API_URL`
 - `REACT_APP_MOVIE_ASSETS_BASE_URL`
 
-The saved-movies API defaults to `https://movies-explorer-api.rustik-yuldashev.workers.dev`. The catalogue and image defaults use the Beatfilm Movies API host. Do not place private credentials in frontend environment variables; values included in a browser build are public.
+The saved-movies API defaults to `https://movies-explorer-api.rustik-yuldashev.workers.dev`. The catalogue uses bundled demo data and the demo posters are bundled locally. Do not place private credentials in frontend environment variables; values included in a browser build are public.
 
 ## Project Background
 

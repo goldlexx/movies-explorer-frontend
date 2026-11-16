@@ -44,15 +44,6 @@ export const updateUserInfo = (name, email) => {
   }).then(checkResponse);
 };
 
-export const getUserInfo = () => {
-  return fetch(`${BASE_URL}/users/me`, {
-    headers: {
-      'Content-type': 'application/json',
-      Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    },
-  }).then(checkResponse);
-};
-
 export const checkToken = (token) => {
   return fetch(`${BASE_URL}/users/me`, {
     method: 'GET',

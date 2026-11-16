@@ -3,6 +3,15 @@
   background-color: #202020;
 }
 
+.movies-list__status {
+  margin: 0;
+  padding: 14px 24px 0;
+  color: #a0f0c8;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .movies-list__container {
   display: grid;
   justify-content: center;

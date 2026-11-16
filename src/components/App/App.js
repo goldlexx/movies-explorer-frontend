@@ -25,6 +25,8 @@ function App() {
   const [isRegisterMessage, setRegisterMessage] = useState(false);
   const [isLoginMessage, setLoginMessage] = useState(false);
   const [isErrorLoginBtn, setIsErrorLoginBtn] = useState(false);
+  const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
+  const [movieActionMessage, setMovieActionMessage] = useState('');
   const [movies, setMovies] = useState(DEMO_MOVIES);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +50,7 @@ function App() {
     setIsFailed(false);
     setMovies([]);
     setSavedMovies([]);
+    setAllSavedMovies([]);
     setChecked(true);
     setCheckedSaveMovies(true);
     setIsNotFound(false);
@@ -59,17 +62,15 @@ function App() {
 
     apiAuth
       .checkToken(jwt)
-      .then((res) => {
-        if (res) {
-          setLoggedIn(true);
-          navigate(location.pathname);
-        }
+      .then((user) => {
+        setCurrentUser(user);
+        setLoggedIn(true);
       })
       .catch((err) => {
-        onSignOut();
+        if (err.status === 401) onSignOut();
         console.error(err);
       });
-  }, [location.pathname, navigate, onSignOut]);
+  }, [onSignOut]);
 
   useEffect(() => {
     tokenCheck();
@@ -81,20 +82,13 @@ function App() {
         .getSavedMovies()
         .then((res) => {
           setSavedMovies(res);
+          setAllSavedMovies(res);
           setIsFailed(false);
         })
         .catch((err) => {
           console.error('Saved movies could not be loaded:', err);
           setSavedMovies([]);
           setIsFailed(true);
-        });
-      apiAuth
-        .getUserInfo()
-        .then((data) => {
-          setCurrentUser(data);
-        })
-        .catch((err) => {
-          console.error(`Данные пользователя не получены: ${err}`);
         });
       const storedChecked = localStorage.getItem('checkbox');
       const storedSavedChecked = localStorage.getItem('checkboxSaveMovies');
@@ -104,32 +98,38 @@ function App() {
   }, [loggedIn]);
 
   const handleSaveMovie = (movie) => {
+    setMovieActionMessage('');
     mainApi
       .addMovie(movie)
       .then((data) => {
-        setSavedMovies([data, ...savedMovies]);
+        setSavedMovies((current) => [data, ...current]);
+        setAllSavedMovies((current) => [data, ...current]);
+        setMovieActionMessage('Фильм сохранён.');
       })
       .catch((err) => {
         console.error(err);
+        setMovieActionMessage('Не удалось сохранить фильм. Попробуйте ещё раз.');
       });
   };
 
   const handleDeleteMovie = (movie) => {
-    const savedMovie = savedMovies.find(
+    const savedMovie = allSavedMovies.find(
       (item) => item.movieId === movie.movieId
     );
 
+    if (!savedMovie) return;
+
+    setMovieActionMessage('');
     mainApi
       .deleteMovie(savedMovie._id)
       .then(() => {
-        const newMoviesList = savedMovies.filter(
-          (item) => item._id !== savedMovie._id
-        );
-
-        setSavedMovies(newMoviesList);
+        setSavedMovies((current) => current.filter((item) => item._id !== savedMovie._id));
+        setAllSavedMovies((current) => current.filter((item) => item._id !== savedMovie._id));
+        setMovieActionMessage('Фильм удалён из сохранённых.');
       })
       .catch((err) => {
         console.error(err);
+        setMovieActionMessage('Не удалось удалить фильм. Попробуйте ещё раз.');
       });
   };
 
@@ -178,41 +178,25 @@ function App() {
     localStorage.setItem('searchKeyword', '');
   }, [location.pathname]);
 
-  const handleSearchSavedMovies = async (name) => {
-    setIsLoading(true);
+  const handleSearchSavedMovies = (name) => {
     setIsFailed(false);
     setIsNotFound(false);
-
-    try {
-      const allMovies = await mainApi.getSavedMovies();
-      const userMovies = allMovies.filter(
-        (movie) => movie.owner === currentUser._id
-      );
-      const searchArr = searchMovies(userMovies, name);
-
-      setAllSavedMovies(allMovies);
-      setSavedMovies(searchArr);
-      setIsNotFound(searchArr.length === 0);
-      localStorage.setItem('checkboxSaveMovies', JSON.stringify(checkedSaveMovies));
-    } catch (error) {
-      console.error('Saved movie search failed:', error);
-      setSavedMovies([]);
-      setIsFailed(true);
-    } finally {
-      setIsLoading(false);
-    }
+    const searchArr = searchMovies(allSavedMovies, name);
+    setSavedMovies(searchArr);
+    setIsNotFound(searchArr.length === 0);
+    localStorage.setItem('searchKeyword', name);
+    localStorage.setItem('checkboxSaveMovies', JSON.stringify(checkedSaveMovies));
   };
 
-  const onRegister = (name, email, password) => {
-    apiAuth
-      .register(name, email, password)
-      .then((data) => {
-        if (data) {
-          onLogin(email, password);
-        }
-        setIsErrorRegisterBtn(false);
-      })
-      .catch((err) => {
+  const onRegister = async (name, email, password) => {
+    setIsAuthSubmitting(true);
+    setRegisterMessage(false);
+    try {
+      await apiAuth.register(name, email, password);
+      setIsErrorRegisterBtn(false);
+      setIsAuthSubmitting(false);
+      await onLogin(email, password);
+    } catch (err) {
         if (err.status === 409) {
           setRegisterMessage('Пользователь с таким email уже зарегистрирован');
         } else if (err.status === 400) {
@@ -221,32 +205,33 @@ function App() {
           setRegisterMessage(err.message || 'При регистрации пользователя произошла ошибка.');
         }
         setIsErrorRegisterBtn(true);
-      });
+    } finally {
+      setIsAuthSubmitting(false);
+    }
   };
 
-  const onLogin = (email, password) => {
-    apiAuth
-      .authorize(email, password)
-      .then((res) => {
-        if (res.token) {
-          localStorage.setItem('jwt', res.token);
-          setIsErrorLoginBtn(false);
-          apiAuth.checkToken(res.token).then((res) => {
-            if (res) {
-              setTimeout(() => navigate('/movies'), 800);
-              setLoggedIn(true);
-            }
-          });
-        }
-      })
-      .catch((err) => {
+  const onLogin = async (email, password) => {
+    setIsAuthSubmitting(true);
+    setLoginMessage(false);
+    try {
+      const res = await apiAuth.authorize(email, password);
+      if (!res.token) throw new Error('Сервер не вернул токен авторизации.');
+      localStorage.setItem('jwt', res.token);
+      const user = await apiAuth.checkToken(res.token);
+      setCurrentUser(user);
+      setLoggedIn(true);
+      setIsErrorLoginBtn(false);
+      navigate('/movies');
+    } catch (err) {
         if (err.status === 401) {
           setLoginMessage('Вы ввели неправильный логин или пароль.');
         } else {
-          setLoginMessage('Не удалось войти. Проверьте подключение и попробуйте ещё раз.');
+          setLoginMessage(err.message || 'Не удалось войти. Проверьте подключение и попробуйте ещё раз.');
         }
         setIsErrorLoginBtn(true);
-      });
+    } finally {
+      setIsAuthSubmitting(false);
+    }
   };
 
   const onUpdateUser = (name, email) => {
@@ -286,6 +271,7 @@ function App() {
               onSave={handleSaveMovie}
               onDelete={handleDeleteMovie}
               allSavedMovies={allSavedMovies}
+              actionMessage={movieActionMessage}
             />
           }
         />
@@ -307,6 +293,7 @@ function App() {
                 onSave={handleSaveMovie}
                 onDelete={handleDeleteMovie}
                 allSavedMovies={allSavedMovies}
+                actionMessage={movieActionMessage}
               ></SavedMovies>
             </ProtectedRoute>
           }
@@ -330,6 +317,7 @@ function App() {
               onRegister={onRegister}
               isErrorRegisterBtn={isErrorRegisterBtn}
               isRegisterMessage={isRegisterMessage}
+              isSubmitting={isAuthSubmitting}
             />
           }
         />
@@ -340,6 +328,7 @@ function App() {
               onLogin={onLogin}
               isLoginMessage={isLoginMessage}
               isErrorLoginBtn={isErrorLoginBtn}
+              isSubmitting={isAuthSubmitting}
             />
           }
         />

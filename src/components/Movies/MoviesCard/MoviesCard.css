@@ -4,9 +4,12 @@
 
 .movie-card__image {
   margin-bottom: 10px;
-  width: 270px;
-  height: 151px;
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 270 / 151;
   object-fit: cover;
+  background-color: #2f2f2f;
 }
 
 .movie-card__description {
@@ -63,14 +66,5 @@
 @media screen and (max-width: 990px) {
   .movie-card__image {
     margin-bottom: 14px;
-    width: 339px;
-    height: 190px;
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .movie-card__image {
-    width: 300px;
-    height: 168px;
   }
 }

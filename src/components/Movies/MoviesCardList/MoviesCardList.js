@@ -25,6 +25,12 @@ const getMovieThumbnail = (movie) => {
     : '';
 };
 
+const getVisibleCount = (width) => width <= BREAKPOINT_480 ? VISIBLE_MOVIES_5
+  : width <= BREAKPOINT_990 ? VISIBLE_MOVIES_8
+    : width <= BREAKPOINT_1280 ? VISIBLE_MOVIES_12 : VISIBLE_MOVIES_16;
+const getLoadCount = (width) => width <= BREAKPOINT_990 ? MOVIES_TO_LOAD_2
+  : width <= BREAKPOINT_1280 ? MOVIES_TO_LOAD_3 : MOVIES_TO_LOAD_4;
+
 function MoviesCardList({
   movies,
   isNotFound,
@@ -36,9 +42,10 @@ function MoviesCardList({
   checkedSaveMovies,
   allSavedMovies,
   loggedIn,
+  actionMessage,
 }) {
-  const [moviesToLoad, setMoviesToLoad] = useState(0);
-  const [displayedMovies, setDisplayedMovies] = useState(0);
+  const [moviesToLoad, setMoviesToLoad] = useState(() => getLoadCount(window.innerWidth));
+  const [displayedMovies, setDisplayedMovies] = useState(() => getVisibleCount(window.innerWidth));
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const location = useLocation();
 
@@ -63,32 +70,15 @@ function MoviesCardList({
     };
 
     if (location.pathname === '/movies') {
-      if (windowWidth <= BREAKPOINT_480) {
-        setDisplayedMovies(VISIBLE_MOVIES_5);
-        setMoviesToLoad(MOVIES_TO_LOAD_2);
-      } else if (
-        windowWidth <= BREAKPOINT_990 &&
-        windowWidth > BREAKPOINT_480
-      ) {
-        setDisplayedMovies(VISIBLE_MOVIES_8);
-        setMoviesToLoad(MOVIES_TO_LOAD_2);
-      } else if (
-        windowWidth <= BREAKPOINT_1280 &&
-        windowWidth > BREAKPOINT_990
-      ) {
-        setDisplayedMovies(VISIBLE_MOVIES_12);
-        setMoviesToLoad(MOVIES_TO_LOAD_3);
-      } else if (windowWidth > BREAKPOINT_1280) {
-        setDisplayedMovies(VISIBLE_MOVIES_16);
-        setMoviesToLoad(MOVIES_TO_LOAD_4);
-      }
+      setDisplayedMovies(getVisibleCount(windowWidth));
+      setMoviesToLoad(getLoadCount(windowWidth));
     }
 
     window.addEventListener('resize', handleWindowResize);
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, [windowWidth, location]);
+  }, [windowWidth, location.pathname]);
 
   let classTextError =
     isFailed && !isNotFound
@@ -111,6 +101,7 @@ function MoviesCardList({
 
   return (
     <section className='movies-list'>
+      {actionMessage && <p className='movies-list__status' role='status'>{actionMessage}</p>}
       {moviesBlock ? (
         <>
           <ul className='movies-list__container'>

@@ -2,7 +2,7 @@ import './Login.css';
 import { Link } from 'react-router-dom';
 import { useFormWithValidation } from '../../../utils/hoocks/useFormWithValidation';
 
-function Login({ onLogin, isLoginMessage, isErrorLoginBtn }) {
+function Login({ onLogin, isLoginMessage, isErrorLoginBtn, isSubmitting }) {
   const controlInput = useFormWithValidation();
   const { email, password } = controlInput.errors;
   const errorClassName = !controlInput.isValid
@@ -72,9 +72,9 @@ function Login({ onLogin, isLoginMessage, isErrorLoginBtn }) {
               <button
                 type='submit'
                 className='login__submit-button'
-                disabled={!controlInput.isValid}
+                disabled={!controlInput.isValid || isSubmitting}
               >
-                Войти
+                {isSubmitting ? 'Входим…' : 'Войти'}
               </button>
             </fieldset>
           </form>

@@ -2,7 +2,7 @@ import './Register.css';
 import { Link } from 'react-router-dom';
 import { useFormWithValidation } from '../../../utils/hoocks/useFormWithValidation';
 
-function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
+function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage, isSubmitting }) {
   const controlInput = useFormWithValidation();
   const { name, email, password } = controlInput.errors;
 
@@ -92,9 +92,9 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
               <button
                 type='submit'
                 className='register__submit-button'
-                disabled={!controlInput.isValid}
+                disabled={!controlInput.isValid || isSubmitting}
               >
-                Зарегистрироваться
+                {isSubmitting ? 'Регистрируем…' : 'Зарегистрироваться'}
               </button>
             </fieldset>
           </form>

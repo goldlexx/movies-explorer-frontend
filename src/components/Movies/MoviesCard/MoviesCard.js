@@ -1,4 +1,5 @@
 import { useLocation } from 'react-router-dom';
+import posterFallback from '../../../images/promo-logo.svg';
 import './MoviesCard.css';
 
 function MoviesCard({
@@ -43,7 +44,22 @@ function MoviesCard({
         target='_blank'
         rel='noreferrer'
       >
-        <img src={thumbnail} alt={name} className='movie-card__image' />
+        <img
+          src={thumbnail || posterFallback}
+          alt={name}
+          className='movie-card__image'
+          width='270'
+          height='151'
+          loading='lazy'
+          decoding='async'
+          onError={(event) => {
+            if (event.currentTarget.src !== new URL(posterFallback, window.location.href).href) {
+              event.currentTarget.src = posterFallback;
+            } else {
+              event.currentTarget.style.visibility = 'hidden';
+            }
+          }}
+        />
       </a>
 
       <div className='movie-card__block'>
