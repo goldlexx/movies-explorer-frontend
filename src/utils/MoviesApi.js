@@ -7,7 +7,18 @@ class MoviesApi {
   }
 
   getAllMovies() {
-    return fetch(this._url).then(checkResponse);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+
+    return fetch(this._url, { signal: controller.signal })
+      .then(checkResponse)
+      .catch((error) => {
+        if (error.name === 'AbortError') {
+          throw new Error('Каталог фильмов не ответил вовремя. Попробуйте ещё раз позже.');
+        }
+        throw error;
+      })
+      .finally(() => clearTimeout(timeout));
   }
 }
 

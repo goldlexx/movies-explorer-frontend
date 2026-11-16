@@ -65,7 +65,7 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
                 maxLength='40'
                 required='{true}'
                 placeholder={currentUser.name}
-                pattern='[A-Za-zА-Яа-яЁё\s-]+'
+                pattern='^[A-Za-zА-Яа-яЁё\s\x2d]+$'
                 onChange={controlInput.handleChange}
                 value={controlInput?.values?.name ?? currentUser.name}
                 {...(!isEditInput ? {} : { disabled: true })}
@@ -82,7 +82,7 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
                 minLength='5'
                 maxLength='40'
                 placeholder={currentUser.email}
-                pattern='^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+                pattern='^[A-Za-z0-9_]+(([.]|-)?[A-Za-z0-9_]+)*@[A-Za-z0-9]+(([.]|-)?[A-Za-z0-9]+)*[.][A-Za-z]{2,}$'
                 onChange={controlInput.handleChange}
                 value={controlInput?.values?.email ?? currentUser.email}
                 {...(!isEditInput ? {} : { disabled: true })}

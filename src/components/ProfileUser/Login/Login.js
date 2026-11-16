@@ -43,7 +43,7 @@ function Login({ onLogin, isLoginMessage, isErrorLoginBtn }) {
                   placeholder='Email'
                   autoComplete='off'
                   className='login__input'
-                  pattern='^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+                  pattern='^[A-Za-z0-9_]+(([.]|-)?[A-Za-z0-9_]+)*@[A-Za-z0-9]+(([.]|-)?[A-Za-z0-9]+)*[.][A-Za-z]{2,}$'
                   minLength='5'
                   maxLength='40'
                   onChange={controlInput.handleChange}

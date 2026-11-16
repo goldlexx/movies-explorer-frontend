@@ -46,7 +46,7 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
                   className='register__input'
                   minLength='5'
                   maxLength='40'
-                  pattern='[A-Za-zА-Яа-яЁё\s-]+'
+                  pattern='^[A-Za-zА-Яа-яЁё\s\x2d]+$'
                   onChange={controlInput.handleChange}
                   value={controlInput?.values?.name || ''}
                   required
@@ -64,7 +64,7 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage }) {
                   className='register__input'
                   minLength='5'
                   maxLength='40'
-                  pattern='^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$'
+                  pattern='^[A-Za-z0-9_]+(([.]|-)?[A-Za-z0-9_]+)*@[A-Za-z0-9]+(([.]|-)?[A-Za-z0-9]+)*[.][A-Za-z]{2,}$'
                   onChange={controlInput.handleChange}
                   value={controlInput?.values?.email || ''}
                   required

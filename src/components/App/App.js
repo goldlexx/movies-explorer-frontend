@@ -149,7 +149,9 @@ function App() {
   const searchMovies = (movies, name) => {
     const keyword = name.trim().toLowerCase();
     return movies.filter((item) =>
-      (item.nameRU || item.nameEN || '').toLowerCase().includes(keyword)
+      [item.nameRU, item.nameEN]
+        .filter((movieName) => typeof movieName === 'string')
+        .some((movieName) => movieName.toLowerCase().includes(keyword))
     );
   };
 
@@ -247,8 +249,10 @@ function App() {
         }
       })
       .catch((err) => {
-        if (err.includes(401)) {
+        if (err.status === 401) {
           setLoginMessage('Вы ввели неправильный логин или пароль.');
+        } else {
+          setLoginMessage('Не удалось войти. Проверьте подключение и попробуйте ещё раз.');
         }
         setIsErrorLoginBtn(true);
       });
