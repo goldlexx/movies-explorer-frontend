@@ -220,11 +220,13 @@ function App() {
         setIsErrorRegisterBtn(false);
       })
       .catch((err) => {
-        err.status !== 400
-          ? setRegisterMessage('Пользователь с таким email уже зарегистрирован')
-          : setRegisterMessage(
-              'При регистрации пользователя произошла ошибка.'
-            );
+        if (err.status === 409) {
+          setRegisterMessage('Пользователь с таким email уже зарегистрирован');
+        } else if (err.status === 400) {
+          setRegisterMessage('Проверьте корректность введённых данных.');
+        } else {
+          setRegisterMessage(err.message || 'При регистрации пользователя произошла ошибка.');
+        }
         setIsErrorRegisterBtn(true);
       });
   };

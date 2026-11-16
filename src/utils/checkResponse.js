@@ -10,7 +10,9 @@ const checkResponse = async (response) => {
   }
 
   if (!response.ok) {
-    throw new Error(payload?.message || `Request failed (${response.status}).`);
+    const error = new Error(payload?.message || `Request failed (${response.status}).`);
+    error.status = response.status;
+    throw error;
   }
 
   return payload;
