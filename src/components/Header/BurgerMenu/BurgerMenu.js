@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './BurgerMenu.css';
 
-function BurgerMenu({ isOpen, isClose }) {
+function BurgerMenu({ isOpen, isClose, loggedIn }) {
   return (
     <div className={`burger-menu ${isOpen && 'open'}`}>
       <div className='burger-menu__container'>
@@ -17,12 +17,17 @@ function BurgerMenu({ isOpen, isClose }) {
           <Link to='/movies' className='burger-menu__link'>
             Фильмы
           </Link>
-          <Link to='/saved-movies' className='burger-menu__link'>
-            Сохраненные фильмы
-          </Link>
+          {loggedIn ? (
+            <Link to='/saved-movies' className='burger-menu__link'>
+              Сохраненные фильмы
+            </Link>
+          ) : null}
         </nav>
-        <Link to='/profile' className='burger-menu__btn-profile'>
-          Аккаунт
+        <Link
+          to={loggedIn ? '/profile' : '/signin'}
+          className='burger-menu__btn-profile'
+        >
+          {loggedIn ? 'Аккаунт' : 'Войти'}
         </Link>
       </div>
     </div>

@@ -1,27 +1,16 @@
+import checkResponse from './checkResponse';
+import { MOVIES_CATALOG_API_URL } from './config';
+
 class MoviesApi {
   constructor({ url }) {
     this._url = url;
   }
 
-  checkError(res) {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
-  }
-
   getAllMovies() {
-    return fetch(`${this._url}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then((res) => this.checkError(res));
+    return fetch(this._url).then(checkResponse);
   }
 }
 
-const moviesApi = new MoviesApi({
-  url: 'https://api.nomoreparties.co/beatfilm-movies',
-});
+const moviesApi = new MoviesApi({ url: MOVIES_CATALOG_API_URL });
 
 export default moviesApi;

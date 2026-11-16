@@ -2,6 +2,7 @@ import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { MOVIE_ASSETS_BASE_URL } from '../../../utils/config';
 import {
   BREAKPOINT_1280,
   BREAKPOINT_990,
@@ -15,6 +16,13 @@ import {
   MOVIES_TO_LOAD_4,
 } from '../../../utils/constants';
 
+const getMovieThumbnail = (movie) => {
+  const imagePath = movie.image?.formats?.thumbnail?.url || movie.image?.url;
+  return imagePath
+    ? new URL(imagePath, `${MOVIE_ASSETS_BASE_URL}/`).toString()
+    : '';
+};
+
 function MoviesCardList({
   movies,
   isNotFound,
@@ -25,6 +33,7 @@ function MoviesCardList({
   checked,
   checkedSaveMovies,
   allSavedMovies,
+  loggedIn,
 }) {
   const [moviesToLoad, setMoviesToLoad] = useState(0);
   const [displayedMovies, setDisplayedMovies] = useState(0);
@@ -110,12 +119,13 @@ function MoviesCardList({
                   name={movie.nameRU}
                   duration={movie.duration}
                   trailerLink={movie.trailerLink}
-                  thumbnail={`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`}
+                  thumbnail={getMovieThumbnail(movie)}
                   savedMovies={savedMovies}
                   onSave={onSave}
                   onDelete={onDelete}
                   movie={movie}
                   allSavedMovies={allSavedMovies}
+                  loggedIn={loggedIn}
                 />
               );
             })}
@@ -151,6 +161,7 @@ function MoviesCardList({
                 onDelete={onDelete}
                 movie={movie}
                 allSavedMovies={allSavedMovies}
+                loggedIn={loggedIn}
               />
             );
           })}

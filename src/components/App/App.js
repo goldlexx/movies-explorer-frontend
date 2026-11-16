@@ -81,9 +81,12 @@ function App() {
         .getSavedMovies()
         .then((res) => {
           setSavedMovies(res);
+          setIsFailed(false);
         })
         .catch((err) => {
-          console.log(err);
+          console.error('Saved movies could not be loaded:', err);
+          setSavedMovies([]);
+          setIsFailed(true);
         });
       apiAuth
         .getUserInfo()
@@ -144,75 +147,67 @@ function App() {
   };
 
   const searchMovies = (movies, name) => {
+    const keyword = name.trim().toLowerCase();
     return movies.filter((item) =>
-      item.nameRU.toLowerCase().includes(name.toLowerCase())
+      (item.nameRU || item.nameEN || '').toLowerCase().includes(keyword)
     );
   };
 
-  const handleSearchMovies = (name) => {
-    if (!JSON.parse(localStorage.getItem('allMovies'))) {
-      moviesApi
-        .getAllMovies()
-        .then((movies) => {
-          const before = movies.slice(0, 23);
-          const after = movies.slice(24);
-          const arrMovies = before.concat(after);
-          localStorage.setItem('allMovies', JSON.stringify(arrMovies));
-        })
-        .then(() => {
-          setIsLoading(true);
-          const searchArr = searchMovies(
-            JSON.parse(localStorage.getItem('allMovies')),
-            name
-          );
-          setMovies(searchArr);
-          setIsNotFound(!movies.length && !isFailed);
-          localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
-          localStorage.setItem('searchKeyword', name);
-          localStorage.setItem('checkbox', checked);
-          setTimeout(() => setIsLoading(false), 1000);
-        })
-        .catch((err) => {
-          setIsFailed(true);
-          console.log(err);
-        });
-    } else if (JSON.parse(localStorage.getItem('allMovies'))) {
-      setIsLoading(true);
-      const searchArr = searchMovies(
-        JSON.parse(localStorage.getItem('allMovies')),
-        name
-      );
+  const handleSearchMovies = async (name) => {
+    setIsLoading(true);
+    setIsFailed(false);
+    setIsNotFound(false);
+
+    try {
+      const cachedMovies = JSON.parse(localStorage.getItem('allMovies') || 'null');
+      const allMovies = Array.isArray(cachedMovies)
+        ? cachedMovies
+        : await moviesApi.getAllMovies();
+
+      if (!Array.isArray(allMovies)) {
+        throw new Error('The movie catalog returned an invalid response.');
+      }
+
+      const searchArr = searchMovies(allMovies, name);
       setMovies(searchArr);
-      setIsNotFound(!movies.length || !isFailed);
+      setIsNotFound(searchArr.length === 0);
+      localStorage.setItem('allMovies', JSON.stringify(allMovies));
       localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
       localStorage.setItem('searchKeyword', name);
-      localStorage.setItem('checkbox', checked);
-      setTimeout(() => setIsLoading(false), 1000);
+      localStorage.setItem('checkbox', JSON.stringify(checked));
+    } catch (error) {
+      console.error('Movie search failed:', error);
+      setMovies([]);
+      setIsNotFound(false);
+      setIsFailed(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleSearchSavedMovies = (name) => {
+  const handleSearchSavedMovies = async (name) => {
     setIsLoading(true);
-    mainApi
-      .getSavedMovies()
-      .then((movies) => {
-        setAllSavedMovies(movies);
-        localStorage.setItem('checkboxSaveMovies', checkedSaveMovies);
-        const userSavedMovies = movies.filter((movie) => {
-          return movie.owner === currentUser._id;
-        });
-        const searchArr = searchMovies(userSavedMovies, name);
-        setSavedMovies(searchArr);
-        setIsNotFound(!searchArr.length && !isFailed);
-        setTimeout(() => setIsLoading(false), 1000);
-      })
-      .catch((err) => console.log(err));
+    setIsFailed(false);
+    setIsNotFound(false);
 
-    const searchArr = searchMovies(allSavedMovies, name);
+    try {
+      const allMovies = await mainApi.getSavedMovies();
+      const userMovies = allMovies.filter(
+        (movie) => movie.owner === currentUser._id
+      );
+      const searchArr = searchMovies(userMovies, name);
 
-    setSavedMovies(searchArr);
-    setIsNotFound(!searchArr.length || !isFailed);
-    setTimeout(() => setIsLoading(false), 1000);
+      setAllSavedMovies(allMovies);
+      setSavedMovies(searchArr);
+      setIsNotFound(searchArr.length === 0);
+      localStorage.setItem('checkboxSaveMovies', JSON.stringify(checkedSaveMovies));
+    } catch (error) {
+      console.error('Saved movie search failed:', error);
+      setSavedMovies([]);
+      setIsFailed(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onRegister = (name, email, password) => {
@@ -274,31 +269,27 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <p className='service-preview' role='status'>
-        Preview: movie search uses the public catalog API. Sign-in and saved movies require the separate Movies API; failed requests are shown without simulated success.
-      </p>
       <Routes>
         <Route path='/' element={<Main loggedIn={loggedIn} />} />
         <Route
           path='/movies'
           element={
-            <ProtectedRoute loggedIn={loggedIn}>
-              <Movies
-                onSubmit={handleSearchMovies}
-                movies={movies}
-                isLoading={isLoading}
-                isFailed={isFailed}
-                isNotFound={isNotFound}
-                searchKeyword={localStorage.getItem('searchKeyword')}
-                onCheckbox={handleChangeCheckbox}
-                checked={checked}
-                checkedSaveMovies={checkedSaveMovies}
-                savedMovies={savedMovies}
-                onSave={handleSaveMovie}
-                onDelete={handleDeleteMovie}
-                allSavedMovies={allSavedMovies}
-              ></Movies>
-            </ProtectedRoute>
+            <Movies
+              loggedIn={loggedIn}
+              onSubmit={handleSearchMovies}
+              movies={movies}
+              isLoading={isLoading}
+              isFailed={isFailed}
+              isNotFound={isNotFound}
+              searchKeyword={localStorage.getItem('searchKeyword')}
+              onCheckbox={handleChangeCheckbox}
+              checked={checked}
+              checkedSaveMovies={checkedSaveMovies}
+              savedMovies={savedMovies}
+              onSave={handleSaveMovie}
+              onDelete={handleDeleteMovie}
+              allSavedMovies={allSavedMovies}
+            />
           }
         />
         <Route

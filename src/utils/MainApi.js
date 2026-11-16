@@ -1,33 +1,36 @@
+import checkResponse from './checkResponse';
+import { MOVIE_ASSETS_BASE_URL, MOVIES_API_BASE_URL } from './config';
+
 class MainApi {
-  constructor({ url }) {
+  constructor({ url, assetsUrl }) {
     this._url = url;
+    this._assetsUrl = assetsUrl;
   }
 
-  checkError(res) {
-    if (res.ok) {
-      return res.json();
-    } else {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
+  _getAuthHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('jwt') || ''}`,
+    };
+  }
+
+  _getAssetUrl(path) {
+    return path ? new URL(path, `${this._assetsUrl}/`).toString() : '';
   }
 
   getSavedMovies() {
     return fetch(`${this._url}/movies`, {
       headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        Authorization: `Bearer ${localStorage.getItem('jwt') || ''}`,
       },
-    }).then((res) => {
-      return this.checkError(res);
-    });
+    }).then(checkResponse);
   }
 
   addMovie(movie) {
     return fetch(`${this._url}/movies`, {
       method: 'POST',
       headers: {
-        'Content-type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+        ...this._getAuthHeaders(),
       },
       body: JSON.stringify({
         country: movie.country,
@@ -35,35 +38,33 @@ class MainApi {
         duration: movie.duration,
         year: movie.year,
         description: movie.description,
-        image: `https://api.nomoreparties.co${movie.image.url}`,
+        image: this._getAssetUrl(movie.image?.url),
         trailerLink: movie.trailerLink,
-        thumbnail: `https://api.nomoreparties.co${movie.image.formats.thumbnail.url}`,
-        movieId: movie.id.toString(),
+        thumbnail: this._getAssetUrl(
+          movie.image?.formats?.thumbnail?.url || movie.image?.url
+        ),
+        movieId: String(movie.id),
         nameRU: movie.nameRU,
         nameEN: movie.nameEN,
       }),
-    }).then((res) => {
-      return this.checkError(res);
-    });
+    }).then(checkResponse);
   }
 
   deleteMovie(id) {
     return fetch(`${this._url}/movies/${id}`, {
       method: 'DELETE',
       headers: {
-        'Content-type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        Authorization: `Bearer ${localStorage.getItem('jwt') || ''}`,
       },
-    }).then((res) => {
-      return this.checkError(res);
-    });
+    }).then(checkResponse);
   }
 
 
 }
 
 const mainApi = new MainApi({
-  url: 'https://api.movies.explorer.nomorepartiesxyz.ru',
+  url: MOVIES_API_BASE_URL,
+  assetsUrl: MOVIE_ASSETS_BASE_URL,
 });
 
 export default mainApi;

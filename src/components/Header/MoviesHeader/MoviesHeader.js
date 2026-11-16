@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import './MoviesHeader.css';
 
-function MoviesHeader() {
+function MoviesHeader({ loggedIn }) {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState('');
   const handleBurgerMenuOpenClick = () => setIsBurgerMenuOpen('open');
   const handleBurgerMenuCloseClick = () => setIsBurgerMenuOpen('');
@@ -17,14 +17,16 @@ function MoviesHeader() {
               Фильмы
             </NavLink>
           </li>
-          <li className='navigate__item'>
-            <NavLink to='/saved-movies' className='navigate__movies'>
-              Сохранённые фильмы
-            </NavLink>
-          </li>
+          {loggedIn ? (
+            <li className='navigate__item'>
+              <NavLink to='/saved-movies' className='navigate__movies'>
+                Сохранённые фильмы
+              </NavLink>
+            </li>
+          ) : null}
         </ul>
-        <Link to='/profile' className='navigate__account'>
-          Аккаунт
+        <Link to={loggedIn ? '/profile' : '/signin'} className='navigate__account'>
+          {loggedIn ? 'Аккаунт' : 'Войти'}
         </Link>
       </nav>
       <button
@@ -34,6 +36,7 @@ function MoviesHeader() {
       <BurgerMenu
         isOpen={isBurgerMenuOpen}
         isClose={handleBurgerMenuCloseClick}
+        loggedIn={loggedIn}
       ></BurgerMenu>
     </>
   );

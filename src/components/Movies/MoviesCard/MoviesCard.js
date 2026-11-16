@@ -11,6 +11,7 @@ function MoviesCard({
   onDelete,
   movie,
   allSavedMovies,
+  loggedIn,
 }) {
   const location = useLocation();
   let hours = Math.floor(duration / 60);
@@ -25,8 +26,9 @@ function MoviesCard({
 
   const handleSaveClick = () => {
     if (isSaved) {
-      onDelete(savedMovies.filter((m) => m.movieId === movie.id)[0]);
-    } else {
+      const savedMovie = savedMovies.find((item) => item.movieId === movie.id);
+      if (savedMovie) onDelete(savedMovie);
+    } else if (!isAllSaved) {
       onSave(movie);
     }
   };
@@ -48,10 +50,11 @@ function MoviesCard({
         <div className='movie-card__description'>
           <h3 className='movie-card__title'>{name}</h3>
 
-          {location.pathname === '/movies' && (
+          {loggedIn && location.pathname === '/movies' && (
             <button
               className={buttonClassName}
               type='button'
+              aria-label={`${isSaved || isAllSaved ? 'Saved' : 'Save'} ${name}`}
               onClick={handleSaveClick}
             ></button>
           )}

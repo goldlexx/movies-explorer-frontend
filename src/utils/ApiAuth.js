@@ -1,7 +1,7 @@
-export const BASE_URL = 'https://api.movies.explorer.nomorepartiesxyz.ru';
-const checkResponse = (res) => {
-  return res.ok ? res.json() : Promise.reject(`Ошибка: ${res.status}`);
-};
+import checkResponse from './checkResponse';
+import { MOVIES_API_BASE_URL } from './config';
+
+export const BASE_URL = MOVIES_API_BASE_URL;
 
 export const register = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
@@ -10,9 +10,9 @@ export const register = (name, email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      name: name,
-      email: email,
-      password: password,
+      name,
+      email,
+      password,
     }),
   }).then(checkResponse);
 };
@@ -24,8 +24,8 @@ export const authorize = (email, password) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      email: email,
-      password: password,
+      email,
+      password,
     }),
   }).then(checkResponse);
 };
@@ -38,8 +38,8 @@ export const updateUserInfo = (name, email) => {
       Authorization: `Bearer ${localStorage.getItem('jwt')}`,
     },
     body: JSON.stringify({
-      name: name,
-      email: email,
+      name,
+      email,
     }),
   }).then(checkResponse);
 };

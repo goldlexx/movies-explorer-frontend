@@ -20,6 +20,7 @@ function Movies({
   checked,
   checkedSaveMovies,
   allSavedMovies,
+  loggedIn,
 }) {
 
   return (
@@ -28,9 +29,14 @@ function Movies({
         color={'header__theme_black'}
         location={'header__container_movies'}
       >
-        <MainMovies />
+        <MainMovies loggedIn={loggedIn} />
       </Header>
       <main className='movies'>
+        {!loggedIn ? (
+          <p className='service-preview' role='status'>
+            Browse-only demo: movie search uses the public catalog. Sign-in and saved movies require the separate account API.
+          </p>
+        ) : null}
         <SearchForm
           onSubmit={onSubmit}
           searchKeyword={searchKeyword}
@@ -54,6 +60,7 @@ function Movies({
             checked={checked}
             checkedSaveMovies={checkedSaveMovies}
             allSavedMovies={allSavedMovies}
+            loggedIn={loggedIn}
           />
         )}
       </main>
