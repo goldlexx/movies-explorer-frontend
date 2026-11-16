@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 450" role="img" aria-label="Original demo artwork: pink hotel cinema poster">
+  <defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#f3b9a8"/><stop offset="1" stop-color="#8e4260"/></linearGradient></defs>
+  <rect width="320" height="450" fill="url(#bg)"/><rect x="82" y="115" width="156" height="228" rx="4" fill="#a84d63"/><path d="M68 115h184l-18-42H86z" fill="#e7c99e"/><path d="M145 73V44h30v29" fill="#f6e3bd"/><g fill="#f2d29f"><path d="M101 145h24v36h-24zM148 145h24v36h-24zM195 145h24v36h-24zM101 205h24v36h-24zM148 205h24v36h-24zM195 205h24v36h-24z"/></g>
+  <text x="24" y="30" fill="#fff6e8" font-family="Arial,sans-serif" font-size="11" letter-spacing="2">LOCAL DEMO POSTER</text><text x="24" y="397" fill="white" font-family="Arial,sans-serif" font-size="19" font-weight="700">THE GRAND BUDAPEST</text>
+</svg>

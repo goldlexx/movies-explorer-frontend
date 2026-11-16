@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 450" role="img" aria-label="Original demo artwork: blue underwater cinema poster">
+  <defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#173a59"/><stop offset="1" stop-color="#4bb7b0"/></linearGradient></defs>
+  <rect width="320" height="450" fill="url(#bg)"/><circle cx="168" cy="188" r="86" fill="#b6eee0" opacity=".56"/><path d="M0 266c47-38 95 38 143 0s96 38 177 0v184H0z" fill="#126b78"/><path d="M0 323c47-35 95 35 143 0s96 35 177 0" fill="none" stroke="#b9f5e5" stroke-width="5" opacity=".8"/>
+  <text x="24" y="42" fill="#e5fff5" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">LOCAL DEMO POSTER</text><text x="24" y="395" fill="white" font-family="Arial,sans-serif" font-size="20" font-weight="700">THE SHAPE OF WATER</text>
+</svg>

@@ -9,7 +9,7 @@ import ProtectedRoute from '../ProtectedRoute';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 
-import moviesApi from '../../utils/MoviesApi';
+import { DEMO_MOVIES } from '../../data/demoMovies';
 import mainApi from '../../utils/MainApi';
 import * as apiAuth from '../../utils/ApiAuth';
 
@@ -25,7 +25,7 @@ function App() {
   const [isRegisterMessage, setRegisterMessage] = useState(false);
   const [isLoginMessage, setLoginMessage] = useState(false);
   const [isErrorLoginBtn, setIsErrorLoginBtn] = useState(false);
-  const [movies, setMovies] = useState([]);
+  const [movies, setMovies] = useState(DEMO_MOVIES);
   const [savedMovies, setSavedMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isFailed, setIsFailed] = useState(false);
@@ -96,13 +96,10 @@ function App() {
         .catch((err) => {
           console.error(`Данные пользователя не получены: ${err}`);
         });
-      if (JSON.parse(localStorage.getItem('filteredMovies'))) {
-        setMovies(JSON.parse(localStorage.getItem('filteredMovies')));
-        setChecked(JSON.parse(localStorage.getItem('checkbox')));
-        setCheckedSaveMovies(
-          JSON.parse(localStorage.getItem('checkboxSaveMovies'))
-        );
-      }
+      const storedChecked = localStorage.getItem('checkbox');
+      const storedSavedChecked = localStorage.getItem('checkboxSaveMovies');
+      if (storedChecked !== null) setChecked(JSON.parse(storedChecked));
+      if (storedSavedChecked !== null) setCheckedSaveMovies(JSON.parse(storedSavedChecked));
     }
   }, [loggedIn]);
 
@@ -156,36 +153,30 @@ function App() {
   };
 
   const handleSearchMovies = async (name) => {
-    setIsLoading(true);
+    setIsLoading(false);
     setIsFailed(false);
     setIsNotFound(false);
 
-    try {
-      const cachedMovies = JSON.parse(localStorage.getItem('allMovies') || 'null');
-      const allMovies = Array.isArray(cachedMovies)
-        ? cachedMovies
-        : await moviesApi.getAllMovies();
-
-      if (!Array.isArray(allMovies)) {
-        throw new Error('The movie catalog returned an invalid response.');
-      }
-
-      const searchArr = searchMovies(allMovies, name);
-      setMovies(searchArr);
-      setIsNotFound(searchArr.length === 0);
-      localStorage.setItem('allMovies', JSON.stringify(allMovies));
-      localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
-      localStorage.setItem('searchKeyword', name);
-      localStorage.setItem('checkbox', JSON.stringify(checked));
-    } catch (error) {
-      console.error('Movie search failed:', error);
-      setMovies([]);
-      setIsNotFound(false);
-      setIsFailed(true);
-    } finally {
-      setIsLoading(false);
-    }
+    const searchArr = searchMovies(DEMO_MOVIES, name);
+    setMovies(searchArr);
+    setIsNotFound(searchArr.length === 0);
+    localStorage.setItem('allMovies', JSON.stringify(DEMO_MOVIES));
+    localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
+    localStorage.setItem('searchKeyword', name);
+    localStorage.setItem('checkbox', JSON.stringify(checked));
   };
+
+  useEffect(() => {
+    if (location.pathname !== '/movies') return;
+
+    setMovies(DEMO_MOVIES);
+    setIsNotFound(false);
+    setIsFailed(false);
+    setIsLoading(false);
+    localStorage.removeItem('allMovies');
+    localStorage.removeItem('filteredMovies');
+    localStorage.setItem('searchKeyword', '');
+  }, [location.pathname]);
 
   const handleSearchSavedMovies = async (name) => {
     setIsLoading(true);

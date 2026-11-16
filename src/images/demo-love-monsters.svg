@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 450" role="img" aria-label="Original demo artwork: green science-fiction cinema poster">
+  <defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#173d3d"/><stop offset="1" stop-color="#b2a44e"/></linearGradient></defs>
+  <rect width="320" height="450" fill="url(#bg)"/><circle cx="220" cy="177" r="112" fill="#e1c771" opacity=".72"/><path d="M0 315 76 222l57 67 59-102 128 128v135H0z" fill="#142f37"/><circle cx="95" cy="145" r="24" fill="#e0f0c2" opacity=".85"/>
+  <text x="24" y="42" fill="#f6efc6" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">LOCAL DEMO POSTER</text><text x="24" y="390" fill="white" font-family="Arial,sans-serif" font-size="19" font-weight="700">LOVE AND MONSTERS</text>
+</svg>

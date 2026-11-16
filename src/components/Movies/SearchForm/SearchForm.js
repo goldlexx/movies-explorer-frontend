@@ -16,8 +16,8 @@ function SearchForm({
   const location = useLocation();
 
   useEffect(() => {
-    if (searchKeyword && location.pathname === '/movies') {
-      setKeyword(searchKeyword);
+    if (location.pathname === '/movies') {
+      setKeyword(searchKeyword || '');
     }
   }, [location.pathname, searchKeyword]);
 

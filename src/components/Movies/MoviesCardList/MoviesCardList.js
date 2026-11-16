@@ -17,7 +17,9 @@ import {
 } from '../../../utils/constants';
 
 const getMovieThumbnail = (movie) => {
-  const imagePath = movie.image?.formats?.thumbnail?.url || movie.image?.url;
+  const imagePath = typeof movie.image === 'string'
+    ? movie.image
+    : movie.image?.formats?.thumbnail?.url || movie.image?.url;
   return imagePath
     ? new URL(imagePath, `${MOVIE_ASSETS_BASE_URL}/`).toString()
     : '';

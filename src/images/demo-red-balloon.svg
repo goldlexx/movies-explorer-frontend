@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 450" role="img" aria-label="Original demo artwork: red balloon above a Paris skyline">
+  <defs><linearGradient id="bg" x2="0" y2="1"><stop stop-color="#9fd0df"/><stop offset="1" stop-color="#f0e4c8"/></linearGradient></defs>
+  <rect width="320" height="450" fill="url(#bg)"/><circle cx="209" cy="145" r="54" fill="#d44742"/><path d="m209 199-7 15 8-7 7 9-2-17" fill="#b93b38"/><path d="M0 333h320v117H0z" fill="#536778"/><path d="M22 332v-60h44v60m22 0v-91h42v91m29 0v-71h45v71m24 0v-103h45v103m18 0v-58h35v58" fill="#798996"/><path d="M150 261h28v-54h-28z" fill="#536778"/>
+  <text x="24" y="42" fill="#283c51" font-family="Arial,sans-serif" font-size="12" letter-spacing="3">LOCAL DEMO POSTER</text><text x="24" y="399" fill="white" font-family="Arial,sans-serif" font-size="20" font-weight="700">THE RED BALLOON</text>
+</svg>

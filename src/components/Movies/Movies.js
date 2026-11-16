@@ -32,11 +32,9 @@ function Movies({
         <MainMovies loggedIn={loggedIn} />
       </Header>
       <main className='movies'>
-        {!loggedIn ? (
-          <p className='service-preview' role='status'>
-            Browse-only demo: movie search uses the public catalog. Sign-in and saved movies require the separate account API.
-          </p>
-        ) : null}
+        <p className='service-preview' role='status'>
+          Local demo catalog: sample movie data and original demo posters are bundled with this app. {loggedIn ? 'You can save these movies to your account.' : 'Sign in to save movies to your account.'}
+        </p>
         <SearchForm
           onSubmit={onSubmit}
           searchKeyword={searchKeyword}
