@@ -1,6 +1,6 @@
 export const MOVIES_API_BASE_URL =
   process.env.REACT_APP_MOVIES_API_BASE_URL ||
-  'https://api.movies.explorer.nomorepartiesxyz.ru';
+  'https://movies-explorer-api.rustik-yuldashev.workers.dev';
 
 export const MOVIES_CATALOG_API_URL =
   process.env.REACT_APP_MOVIES_CATALOG_API_URL ||
