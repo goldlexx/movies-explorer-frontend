@@ -110,7 +110,7 @@ function App() {
         setSavedMovies([data, ...savedMovies]);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -129,7 +129,7 @@ function App() {
         setSavedMovies(newMoviesList);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
