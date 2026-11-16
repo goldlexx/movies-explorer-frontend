@@ -23,3 +23,33 @@
   font-size: 14px;
   line-height: 1.5;
 }
+
+.app__session-notice {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 20px;
+  color: #fff;
+  background: #8b3c32;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.app__session-notice button {
+  flex: 0 0 auto;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.session-check {
+  display: grid;
+  min-height: 45vh;
+  place-items: center;
+  color: #fff;
+  font-size: 14px;
+}

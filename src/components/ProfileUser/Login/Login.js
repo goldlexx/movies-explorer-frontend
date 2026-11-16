@@ -13,11 +13,11 @@ function Login({ onLogin, isLoginMessage, isErrorLoginBtn, isSubmitting }) {
     ? 'login__error login__error_visible'
     : 'login__error';
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { email, password } = controlInput.values;
-    onLogin(email, password);
-    controlInput.resetForm();
+    const signedIn = await onLogin(email, password);
+    if (signedIn) controlInput.resetForm();
   };
 
   return (

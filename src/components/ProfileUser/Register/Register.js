@@ -14,11 +14,11 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage, isSubmitt
     ? 'register__error register__error_visible'
     : 'register__error';
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password } = controlInput.values;
-    onRegister(name, email, password);
-    controlInput.resetForm();
+    const registered = await onRegister(name, email, password);
+    if (registered) controlInput.resetForm();
   };
 
   return (

@@ -7,7 +7,7 @@ import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 import { DEMO_MOVIES } from '../../data/demoMovies';
 import mainApi from '../../utils/MainApi';
@@ -15,6 +15,22 @@ import * as apiAuth from '../../utils/ApiAuth';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './App.css';
+
+const getApiErrorMessage = (error, action) => {
+  if (error.code === 'API_UNAVAILABLE') {
+    return 'Нет ответа от API (возможны DNS, интернет или CORS). Не отправляйте регистрацию повторно сразу: запрос мог дойти до сервера. Сначала попробуйте войти или проверьте подключение.';
+  }
+  if (error.status === 409 && action === 'register') {
+    return 'Пользователь с таким email уже зарегистрирован.';
+  }
+  if (error.status === 400) return 'Проверьте корректность введённых данных.';
+  if (error.status === 401 && action === 'login') return 'Вы ввели неправильный логин или пароль.';
+  if (error.status === 404) {
+    return 'API не нашёл маршрут авторизации (404). Проверьте адрес сайта и повторите попытку позже.';
+  }
+  if (error.status >= 500) return 'Сервис авторизации временно недоступен. Попробуйте позже.';
+  return error.message || 'Не удалось выполнить запрос. Проверьте подключение и попробуйте позже.';
+};
 
 function App() {
   const location = useLocation();
@@ -26,6 +42,8 @@ function App() {
   const [isLoginMessage, setLoginMessage] = useState(false);
   const [isErrorLoginBtn, setIsErrorLoginBtn] = useState(false);
   const [isAuthSubmitting, setIsAuthSubmitting] = useState(false);
+  const [isSessionChecking, setIsSessionChecking] = useState(() => Boolean(localStorage.getItem('jwt')));
+  const [sessionMessage, setSessionMessage] = useState('');
   const [movieActionMessage, setMovieActionMessage] = useState('');
   const [movies, setMovies] = useState(DEMO_MOVIES);
   const [savedMovies, setSavedMovies] = useState([]);
@@ -36,6 +54,7 @@ function App() {
   const [isMessageProfile, setIsMessageProfile] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
   const [allSavedMovies, setAllSavedMovies] = useState([]);
+  const sessionCheckStarted = useRef(false);
 
   const onSignOut = useCallback(() => {
     localStorage.clear();
@@ -46,6 +65,7 @@ function App() {
     setRegisterMessage(false);
     setLoginMessage(false);
     setIsErrorLoginBtn(false);
+    setSessionMessage('');
     setIsLoading(false);
     setIsFailed(false);
     setMovies([]);
@@ -56,23 +76,29 @@ function App() {
     setIsNotFound(false);
   }, [navigate]);
 
-  const tokenCheck = useCallback(() => {
+  const tokenCheck = useCallback(async () => {
     const jwt = localStorage.getItem('jwt');
-    if (!jwt) return;
-
-    apiAuth
-      .checkToken(jwt)
-      .then((user) => {
-        setCurrentUser(user);
-        setLoggedIn(true);
-      })
-      .catch((err) => {
-        if (err.status === 401) onSignOut();
-        console.error(err);
-      });
+    if (!jwt) {
+      setIsSessionChecking(false);
+      return;
+    }
+    setIsSessionChecking(true);
+    try {
+      const user = await apiAuth.checkToken(jwt);
+      setCurrentUser(user);
+      setLoggedIn(true);
+      setSessionMessage('');
+    } catch (error) {
+      if (error.status === 401) onSignOut();
+      else setSessionMessage(`Не удалось восстановить сессию. ${getApiErrorMessage(error, 'session')}`);
+    } finally {
+      setIsSessionChecking(false);
+    }
   }, [onSignOut]);
 
   useEffect(() => {
+    if (sessionCheckStarted.current) return;
+    sessionCheckStarted.current = true;
     tokenCheck();
   }, [tokenCheck]);
 
@@ -194,17 +220,16 @@ function App() {
     try {
       await apiAuth.register(name, email, password);
       setIsErrorRegisterBtn(false);
-      setIsAuthSubmitting(false);
-      await onLogin(email, password);
-    } catch (err) {
-        if (err.status === 409) {
-          setRegisterMessage('Пользователь с таким email уже зарегистрирован');
-        } else if (err.status === 400) {
-          setRegisterMessage('Проверьте корректность введённых данных.');
-        } else {
-          setRegisterMessage(err.message || 'При регистрации пользователя произошла ошибка.');
-        }
+      const signedIn = await onLogin(email, password);
+      if (!signedIn) {
+        setRegisterMessage('Регистрация прошла успешно, аккаунт создан. Не отправляйте форму повторно; попробуйте войти позже.');
         setIsErrorRegisterBtn(true);
+      }
+      return true;
+    } catch (error) {
+      setRegisterMessage(getApiErrorMessage(error, 'register'));
+      setIsErrorRegisterBtn(true);
+      return false;
     } finally {
       setIsAuthSubmitting(false);
     }
@@ -222,13 +247,11 @@ function App() {
       setLoggedIn(true);
       setIsErrorLoginBtn(false);
       navigate('/movies');
-    } catch (err) {
-        if (err.status === 401) {
-          setLoginMessage('Вы ввели неправильный логин или пароль.');
-        } else {
-          setLoginMessage(err.message || 'Не удалось войти. Проверьте подключение и попробуйте ещё раз.');
-        }
-        setIsErrorLoginBtn(true);
+      return true;
+    } catch (error) {
+      setLoginMessage(getApiErrorMessage(error, 'login'));
+      setIsErrorLoginBtn(true);
+      return false;
     } finally {
       setIsAuthSubmitting(false);
     }
@@ -251,6 +274,12 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
+      {sessionMessage && (
+        <div className='app__session-notice' role='alert'>
+          <span>{sessionMessage}</span>
+          <button type='button' onClick={() => setSessionMessage('')} aria-label='Закрыть сообщение'>×</button>
+        </div>
+      )}
       <Routes>
         <Route path='/' element={<Main loggedIn={loggedIn} />} />
         <Route
@@ -278,7 +307,7 @@ function App() {
         <Route
           path='/saved-movies'
           element={
-            <ProtectedRoute loggedIn={loggedIn}>
+            <ProtectedRoute loggedIn={loggedIn} isChecking={isSessionChecking}>
               <SavedMovies
                 onSubmit={handleSearchSavedMovies}
                 movies={movies}
@@ -301,7 +330,7 @@ function App() {
         <Route
           path='/profile'
           element={
-            <ProtectedRoute loggedIn={loggedIn}>
+            <ProtectedRoute loggedIn={loggedIn} isChecking={isSessionChecking}>
               <Profile
                 onUpdateUser={onUpdateUser}
                 onSignOut={onSignOut}
