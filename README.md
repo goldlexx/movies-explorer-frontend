@@ -1,53 +1,41 @@
-# Movies Explorer
+<div align="center">
 
-A React app for discovering films, filtering short movies, and managing a personal saved-movies list.
+# 🎬 Movies Explorer
 
-## Live Demo
+React-приложение для поиска фильмов, фильтрации короткометражек и сохранения фильмов в личный список.
 
-[Open Movies Explorer](https://goldlexx.github.io/movies-explorer-frontend/)
+[![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=111)](https://react.dev/) [![Cloudflare Workers](https://img.shields.io/badge/API-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=fff)](https://workers.cloudflare.com/) [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-222?logo=github)](https://goldlexx.github.io/movies-explorer-frontend/)
 
-The interface and screenshot use Russian-language content.
+</div>
 
-## Features
+## Возможности
 
-- Search the movie catalogue and filter short films
-- Register, sign in, and edit a profile
-- Save movies to a personal list and remove them later
-- Browse eight bundled local demo movies immediately; no external catalogue request is required
+- локальный каталог из восьми демонстрационных фильмов;
+- поиск и фильтр короткометражек;
+- регистрация, вход и восстановление сессии;
+- сохранение и удаление фильмов через API.
 
-## Tech Stack
+## Демонстрация
 
-- React 18 and React Router 6
-- Create React App (`react-scripts` 5)
-- JavaScript and CSS
-- Cloudflare Workers API for account and saved-movie data
+[Открыть Movies Explorer](https://goldlexx.github.io/movies-explorer-frontend/)
 
-## Getting Started
+## Архитектура
+
+Каталог и постеры демонстрационных фильмов входят во frontend. Пользователи и сохранённые фильмы обслуживаются отдельным [Cloudflare Workers API](https://movies-explorer-api.rustik-yuldashev.workers.dev).
+
+## Установка и запуск
 
 ```bash
-git clone https://github.com/goldlexx/movies-explorer-frontend.git
-cd movies-explorer-frontend
 npm ci
 npm start
 ```
 
-Create a production build with `npm run build`.
+Production-сборка: `npm run build`.
 
-## API Configuration
+## Технологии
 
-The frontend provides defaults for the saved-movies API and movie image host. Override them at build time with:
+React, React Router, JavaScript, CSS, Cloudflare Workers, D1.
 
-- `REACT_APP_MOVIES_API_BASE_URL`
-- `REACT_APP_MOVIE_ASSETS_BASE_URL`
+## Лицензия
 
-The saved-movies API defaults to `https://movies-explorer-api.rustik-yuldashev.workers.dev`. The catalogue uses bundled demo data and the demo posters are bundled locally. Do not place private credentials in frontend environment variables; values included in a browser build are public.
-
-## Project Background
-
-This movie-search application was created as a learning project during the Yandex Practicum web development course.
-
-## Screenshot
-
-![Movies Explorer landing page](screenshots/local-home.jpg)
-
-The screenshot shows the local interface; its text is in Russian.
+Лицензия в репозитории не указана.
