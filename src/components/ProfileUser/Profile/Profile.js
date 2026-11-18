@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import { useFormWithValidation } from '../../../utils/hoocks/useFormWithValidation';
 import { CurrentUserContext } from '../../../contexts/CurrentUserContext';
 
-function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
+function Profile({ onUpdateUser, onSignOut }) {
   const currentUser = useContext(CurrentUserContext);
   const [isEditInput, setIsEditInput] = useState(true);
   const controlInput = useFormWithValidation();
@@ -16,32 +16,31 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
 
   const toggleInput = (e) => {
     e.preventDefault();
+    setFeedback('');
     setIsEditInput((state) => !state);
   };
 
-  let disableUserCurrentCheck =
-    (currentUser.name === controlInput?.values?.name &&
-      typeof controlInput?.values?.email === 'undefined') ||
-    (currentUser.email === controlInput?.values?.email &&
-      typeof controlInput?.values?.email === 'undefined');
+  const [saving, setSaving] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const name = controlInput.values.name ?? currentUser.name;
+  const email = controlInput.values.email ?? currentUser.email;
+  const unchanged = name === currentUser.name && email === currentUser.email;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const { name, email } = controlInput.values;
-    if (!name) {
-      onUpdateUser(currentUser.name, email);
-    } else if (!email) {
-      onUpdateUser(name, currentUser.email);
-    } else {
-      onUpdateUser(name, email);
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (saving || unchanged) return;
+    setSaving(true);
+    try {
+      await onUpdateUser(name, email);
+      setIsEditInput(true);
+      controlInput.resetForm();
+      setFeedback('Изменения сохранены.');
+    } catch {
+      setFeedback('Не удалось сохранить изменения. Попробуйте ещё раз.');
+    } finally {
+      setSaving(false);
     }
-    setTimeout(() => setIsEditInput((state) => !state), 1000);
-    controlInput.resetForm();
   };
-
-  let classNameMessageBtn = isMessageProfile
-    ? 'profile__button-msg'
-    : 'profile__button-msg profile__button-msg_hidden';
 
   return (
     <>
@@ -92,19 +91,17 @@ function Profile({ onUpdateUser, onSignOut, isMessageProfile }) {
 
             {!isEditInput && (
               <>
-                <span className={classNameMessageBtn}>
-                  Изменение данных прошло успешно!
-                </span>
                 <button
                   className='profile__button'
-                  disabled={disableUserCurrentCheck || !controlInput.isValid}
+                  disabled={saving || unchanged || !controlInput.isValid}
                 >
-                  Сохранить
+                  {saving ? 'Сохранение…' : 'Сохранить'}
                 </button>
               </>
             )}
           </form>
 
+          {feedback && <p role='status'>{feedback}</p>}
           {isEditInput && (
             <ul className='profile__list'>
               <li className='profile__item'>

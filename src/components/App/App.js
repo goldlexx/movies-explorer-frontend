@@ -1,13 +1,10 @@
 import Main from '../Main/Main';
-import Movies from '../Movies/Movies';
-import Profile from '../ProfileUser/Profile/Profile';
 import Login from '../ProfileUser/Login/Login';
 import Register from '../ProfileUser/Register/Register';
-import SavedMovies from '../SavedMovies/SavedMovies';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute';
 import { Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useRef } from 'react';
 
 import { DEMO_MOVIES } from '../../data/demoMovies';
 import mainApi from '../../utils/MainApi';
@@ -15,6 +12,10 @@ import * as apiAuth from '../../utils/ApiAuth';
 
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import './App.css';
+
+const Movies = lazy(() => import('../Movies/Movies'));
+const SavedMovies = lazy(() => import('../SavedMovies/SavedMovies'));
+const Profile = lazy(() => import('../ProfileUser/Profile/Profile'));
 
 const getApiErrorMessage = (error, action) => {
   if (error.code === 'API_UNAVAILABLE') {
@@ -51,7 +52,6 @@ function App() {
   const [isFailed, setIsFailed] = useState(false);
   const [checked, setChecked] = useState(true);
   const [checkedSaveMovies, setCheckedSaveMovies] = useState(true);
-  const [isMessageProfile, setIsMessageProfile] = useState(false);
   const [isNotFound, setIsNotFound] = useState(false);
   const [allSavedMovies, setAllSavedMovies] = useState([]);
   const sessionCheckStarted = useRef(false);
@@ -186,8 +186,6 @@ function App() {
     const searchArr = searchMovies(DEMO_MOVIES, name);
     setMovies(searchArr);
     setIsNotFound(searchArr.length === 0);
-    localStorage.setItem('allMovies', JSON.stringify(DEMO_MOVIES));
-    localStorage.setItem('filteredMovies', JSON.stringify(searchArr));
     localStorage.setItem('searchKeyword', name);
     localStorage.setItem('checkbox', JSON.stringify(checked));
   };
@@ -214,12 +212,24 @@ function App() {
     localStorage.setItem('checkboxSaveMovies', JSON.stringify(checkedSaveMovies));
   };
 
+  const openSession = (token, user) => {
+    localStorage.setItem('jwt', token);
+    setCurrentUser(user);
+    setLoggedIn(true);
+    setIsErrorLoginBtn(false);
+    navigate('/movies');
+  };
+
   const onRegister = async (name, email, password) => {
     setIsAuthSubmitting(true);
     setRegisterMessage(false);
     try {
-      await apiAuth.register(name, email, password);
+      const { token, ...user } = await apiAuth.register(name, email, password);
       setIsErrorRegisterBtn(false);
+      if (token) {
+        openSession(token, user);
+        return true;
+      }
       const signedIn = await onLogin(email, password);
       if (!signedIn) {
         setRegisterMessage('Регистрация прошла успешно, аккаунт создан. Не отправляйте форму повторно; попробуйте войти позже.');
@@ -241,12 +251,7 @@ function App() {
     try {
       const res = await apiAuth.authorize(email, password);
       if (!res.token) throw new Error('Сервер не вернул токен авторизации.');
-      localStorage.setItem('jwt', res.token);
-      const user = await apiAuth.checkToken(res.token);
-      setCurrentUser(user);
-      setLoggedIn(true);
-      setIsErrorLoginBtn(false);
-      navigate('/movies');
+      openSession(res.token, res.user || await apiAuth.checkToken(res.token));
       return true;
     } catch (error) {
       setLoginMessage(getApiErrorMessage(error, 'login'));
@@ -257,19 +262,9 @@ function App() {
     }
   };
 
-  const onUpdateUser = (name, email) => {
-    apiAuth
-      .updateUserInfo(name, email)
-      .then((data) => {
-        setIsMessageProfile(true);
-        setCurrentUser(data);
-      })
-      .catch((err) => {
-        console.error(err);
-      })
-      .finally(() => {
-        setTimeout(() => setIsMessageProfile(false), 1000);
-      });
+  const onUpdateUser = async (name, email) => {
+    const user = await apiAuth.updateUserInfo(name, email);
+    setCurrentUser(user);
   };
 
   return (
@@ -280,6 +275,7 @@ function App() {
           <button type='button' onClick={() => setSessionMessage('')} aria-label='Закрыть сообщение'>×</button>
         </div>
       )}
+      <Suspense fallback={<p role='status'>Загрузка…</p>}>
       <Routes>
         <Route path='/' element={<Main loggedIn={loggedIn} />} />
         <Route
@@ -334,8 +330,7 @@ function App() {
               <Profile
                 onUpdateUser={onUpdateUser}
                 onSignOut={onSignOut}
-                isMessageProfile={isMessageProfile}
-              />
+                />
             </ProtectedRoute>
           }
         />
@@ -363,6 +358,7 @@ function App() {
         />
         <Route path='*' element={<PageNotFound />} />
       </Routes>
+      </Suspense>
     </CurrentUserContext.Provider>
   );
 }

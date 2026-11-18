@@ -42,10 +42,10 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage, isSubmitt
                   type='text'
                   name='name'
                   placeholder='Имя'
-                  autoComplete='off'
+                  autoComplete='name'
                   className='register__input'
                   minLength='5'
-                  maxLength='40'
+                  maxLength='30'
                   pattern='^[A-Za-zА-Яа-яЁё\s\x2d]+$'
                   onChange={controlInput.handleChange}
                   value={controlInput?.values?.name || ''}
@@ -60,7 +60,7 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage, isSubmitt
                   type='email'
                   name='email'
                   placeholder='Email'
-                  autoComplete='off'
+                  autoComplete='email'
                   className='register__input'
                   minLength='5'
                   maxLength='40'
@@ -77,9 +77,9 @@ function Register({ onRegister, isErrorRegisterBtn, isRegisterMessage, isSubmitt
                   type='password'
                   name='password'
                   placeholder='Пароль'
-                  autoComplete='off'
+                  autoComplete='new-password'
                   className='register__input'
-                  minLength='5'
+                  minLength='8'
                   maxLength='40'
                   onChange={controlInput.handleChange}
                   value={controlInput?.values?.password || ''}
