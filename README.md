@@ -2,40 +2,53 @@
 
 # 🎬 Movies Explorer
 
-React-приложение для поиска фильмов, фильтрации короткометражек и сохранения фильмов в личный список.
+**Кинокаталог с поиском на двух языках, фильтром короткометражек и личной коллекцией.**
 
-[![React](https://img.shields.io/badge/React-18-61dafb?logo=react&logoColor=111)](https://react.dev/) [![Cloudflare Workers](https://img.shields.io/badge/API-Cloudflare%20Workers-f38020?logo=cloudflare&logoColor=fff)](https://workers.cloudflare.com/) [![Demo](https://img.shields.io/badge/demo-GitHub%20Pages-222?logo=github)](https://goldlexx.github.io/movies-explorer-frontend/)
+![React](https://img.shields.io/badge/React-087E98) ![JavaScript](https://img.shields.io/badge/JavaScript-806900) ![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-334155)
+
+[Открыть приложение](https://goldlexx.github.io/movies-explorer-frontend/) · [Репозиторий API](https://github.com/goldlexx/movies-explorer-api) · [Запуск](#локальный-запуск)
 
 </div>
 
-## Возможности
+![Главная страница Movies Explorer с переходами в разделы проекта](screenshots/local-home.jpg)
 
-- локальный каталог из восьми демонстрационных фильмов;
-- поиск и фильтр короткометражек;
-- регистрация, вход и восстановление сессии;
-- сохранение и удаление фильмов через API.
+## Попробуйте в каталоге
 
-## Демонстрация
+1. Зарегистрируйтесь или войдите в существующую учётную запись. На странице фильмов сразу появляются карточки демонстрационного каталога.
+2. Введите `love`. Поиск учитывает русские и английские названия, поэтому в подборке можно найти «Реальную любовь» и «Любовь и монстры». Фильтр короткометражек оставляет фильмы длительностью до 40 минут включительно.
+3. Сохраните фильм и откройте раздел сохранённых. Там можно снова воспользоваться поиском и удалить фильм из своей коллекции. У карточек есть переход к поиску трейлера на YouTube.
+4. В профиле можно изменить имя и email. Коллекция привязана к учётной записи.
 
-[Открыть Movies Explorer](https://goldlexx.github.io/movies-explorer-frontend/)
+## Каталог и учётная запись
 
-## Архитектура
+```mermaid
+flowchart LR
+    Pages[GitHub Pages] --> UI[React в браузере]
+    Catalog[Восемь фильмов и SVG-постеры] --> UI
+    UI -->|Профиль и сохранённые фильмы| API[Cloudflare Worker]
+    API --> DB[(D1)]
+```
 
-Каталог и постеры демонстрационных фильмов входят во frontend. Пользователи и сохранённые фильмы обслуживаются отдельным [Cloudflare Workers API](https://movies-explorer-api.rustik-yuldashev.workers.dev).
+[Каталог из восьми демонстрационных фильмов](src/data/demoMovies.js) включён в сборку вместе с постерами. Список открывается без запроса к внешнему киносправочнику. Данные пользователя и сохранённые фильмы поступают из отдельного [REST API](https://github.com/goldlexx/movies-explorer-api). Для регистрации, входа и изменения коллекции требуется доступ к нему.
 
-## Установка и запуск
+| Технология | Что делает в проекте |
+| --- | --- |
+| React 18 и React Router | Публичная страница, маршруты авторизации, каталог, коллекция и профиль |
+| JavaScript и CSS | Поиск, фильтр и число карточек с учётом ширины экрана |
+| Create React App | Сборка клиента и тесты интерфейса |
+| Workers и D1 | Серверная часть, которая хранит учётные записи и коллекции |
 
-```bash
+## Локальный запуск
+
+```sh
 npm ci
 npm start
 ```
 
-Production-сборка: `npm run build`.
+[Конфигурация API](src/utils/config.js) использует `REACT_APP_MOVIES_API_BASE_URL` для пользовательских данных и `REACT_APP_MOVIE_ASSETS_BASE_URL` для относительных ссылок на изображения. Собственные значения задаются в `.env.local` до старта или сборки. Они попадут в браузерный код.
 
-## Технологии
+По умолчанию выбран опубликованный Worker. Его CORS разрешает origin GitHub Pages. Для локальной проверки авторизации нужен API, разрешающий origin вашего браузера. Опубликованное приложение уже работает с согласованной парой адресов.
 
-React, React Router, JavaScript, CSS, Cloudflare Workers, D1.
+## Сборка и тесты
 
-## Лицензия
-
-Лицензия в репозитории не указана.
+`npm run build` создаёт каталог `build/`. Команда `npm test -- --watchAll=false` запускает тесты приложения, формы поиска, обработки HTTP-ответов и клиента сохранённых фильмов.
